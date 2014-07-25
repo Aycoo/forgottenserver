@@ -1070,6 +1070,27 @@ const char* getReturnMessage(ReturnValue value)
 		case RET_YOUARENOTTHEOWNER:
 			return "You are not the owner.";
 
+		case RET_NOTENOUGHFISTLEVEL:
+			return "You do not have enough fist level";
+
+		case RET_NOTENOUGHCLUBLEVEL:
+			return "You do not have enough club level";
+
+		case RET_NOTENOUGHSWORDLEVEL:
+			return "You do not have enough sword level";
+
+		case RET_NOTENOUGHAXELEVEL:
+			return "You do not have enough axe level";
+
+		case RET_NOTENOUGHDISTANCELEVEL:
+			return "You do not have enough distance level";
+
+		case RET_NOTENOUGHSHIELDLEVEL:
+			return "You do not have enough shielding level";
+
+		case RET_NOTENOUGHFISHLEVEL:
+			return "You do not have enough fishing level";
+
 		default: // RET_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";
 	}
