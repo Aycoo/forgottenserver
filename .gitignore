@@ -169,3 +169,13 @@ pip-log.txt
 .*.swp
 .*.swo
 
+config.lua
+iconv.dll
+libeay32.dll
+libmysql.dll
+libxml2.dll
+lua51.dll
+sqlite.dll
+theforgottenserver.exe
+vc12/theforgottenserver.vcxproj
+zlib1.dll
