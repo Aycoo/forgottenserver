@@ -470,6 +470,66 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
+		case ATTR_ATTACK: {
+			int32_t _attack;
+			if (!propStream.GET_VALUE(_attack)) {
+				return ATTR_READ_ERROR;
+			}
+
+			setAttack(_attack);
+			break;
+		}
+
+		case ATTR_DEFENSE: {
+			int32_t _defense;
+			if (!propStream.GET_VALUE(_defense)) {
+				return ATTR_READ_ERROR;
+			}
+
+			setDefense(_defense);
+			break;
+		}
+
+		case ATTR_EXTRA_DEFENSE: {
+			int32_t _extraDefense;
+			if (!propStream.GET_VALUE(_extraDefense)) {
+				return ATTR_READ_ERROR;
+			}
+
+			setExtraDefense(_extraDefense);
+			break;
+		}
+
+		case ATTR_ARMOR: {
+			int32_t _armor;
+			if (!propStream.GET_VALUE(_armor)) {
+				return ATTR_READ_ERROR;
+			}
+
+			setArmor(_armor);
+			break;
+		}
+
+		case ATTR_SHOOTRANGE: {
+			int32_t _shootRange;
+			if (!propStream.GET_VALUE(_shootRange)) {
+				return ATTR_READ_ERROR;
+			}
+
+			setShootRange(_shootRange);
+			break;
+		}
+
+		case ATTR_HITCHANCE: {
+			int32_t _hitChance;
+			if (!propStream.GET_VALUE(_hitChance)) {
+				return ATTR_READ_ERROR;
+			}
+
+			setHitChance(_hitChance);
+			break;
+		}
+
 		//these should be handled through derived classes
 		//If these are called then something has changed in the items.xml since the map was saved
 		//just read the values
@@ -616,6 +676,42 @@ bool Item::serializeAttr(PropWriteStream& propWriteStream) const
 		propWriteStream.ADD_UCHAR(decayState);
 	}
 
+	int32_t attack = getIntAttr(ITEM_ATTRIBUTE_ATTACK);
+	if (attack != 0) {
+		propWriteStream.ADD_UCHAR(ATTR_ATTACK);
+		propWriteStream.ADD_ULONG(attack);
+	}
+
+	int32_t defense = getIntAttr(ITEM_ATTRIBUTE_DEFENSE);
+	if (defense != 0) {
+		propWriteStream.ADD_UCHAR(ATTR_DEFENSE);
+		propWriteStream.ADD_ULONG(defense);
+	}
+
+	int32_t extraDefense = getIntAttr(ITEM_ATTRIBUTE_EXTRA_DEFENSE);
+	if (extraDefense != 0) {
+		propWriteStream.ADD_UCHAR(ATTR_EXTRA_DEFENSE);
+		propWriteStream.ADD_ULONG(extraDefense);
+	}
+
+	int32_t armor = getIntAttr(ITEM_ATTRIBUTE_ARMOR);
+	if (armor != 0) {
+		propWriteStream.ADD_UCHAR(ATTR_ARMOR);
+		propWriteStream.ADD_ULONG(armor);
+	}
+
+	int32_t shootRange = getIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE);
+	if (shootRange != 0) {
+		propWriteStream.ADD_UCHAR(ATTR_SHOOTRANGE);
+		propWriteStream.ADD_ULONG(shootRange);
+	}
+
+	int32_t hitChance = getIntAttr(ITEM_ATTRIBUTE_HITCHANCE);
+	if (hitChance != 0) {
+		propWriteStream.ADD_UCHAR(ATTR_HITCHANCE);
+		propWriteStream.ADD_ULONG(hitChance);
+	}
+
 	return true;
 }
 
@@ -689,14 +785,14 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		}
 	} else if (it.weaponType != WEAPON_NONE) {
 		if (it.weaponType == WEAPON_DISTANCE && it.ammoType != AMMO_NONE) {
-			s << " (Range:" << it.shootRange;
+			s << " (Range:" << item->getShootRange();
 
 			if (it.attack != 0) {
-				s << ", Atk" << std::showpos << it.attack << std::noshowpos;
+				s << ", Atk" << std::showpos << (item->getAttack() == 0 ? it.attack : item->getAttack()) << std::noshowpos;
 			}
 
 			if (it.hitChance != 0) {
-				s << ", Hit%" << std::showpos << it.hitChance << std::noshowpos;
+				s << ", Hit%" << std::showpos << (item->getHitChance() == 0 ? it.hitChance : item->getHitChance()) << std::noshowpos;
 			}
 
 			s << ')';
@@ -705,7 +801,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 
 			if (it.attack != 0) {
 				begin = false;
-				s << " (Atk:" << it.attack;
+				s << " (Atk:" << (item->getAttack() == 0 ? it.attack : item->getAttack());
 
 				if (it.abilities && it.abilities->elementType != COMBAT_NONE && it.abilities->elementDamage != 0) {
 					s << " physical + " << it.abilities->elementDamage << ' ' << getCombatName(it.abilities->elementType);
@@ -720,10 +816,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "Def:" << it.defense;
+				s << "Def:" << (item->getDefense() == 0 ? it.defense : item->getDefense());
 
-				if (it.extraDefense != 0 || (item && item->getExtraDefense() != 0)) {
-					s << ' ' << std::showpos << it.extraDefense << std::noshowpos;
+				if (it.extraDefense != 0) {
+					s << ' ' << std::showpos << (item->getExtraDefense() == 0 ? it.extraDefense : item->getExtraDefense()) << std::noshowpos;
 				}
 			}
 
@@ -864,10 +960,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << ')';
 			}
 		}
-	} else if (it.armor || (item && item->getArmor()) || it.showAttributes) {
+	} else if (it.armor || it.showAttributes) {
 		int32_t tmp = it.armor;
 
-		if (item) {
+		if (item->getArmor() != 0) {
 			tmp = item->getArmor();
 		}
 
@@ -1426,6 +1522,12 @@ bool ItemAttributes::validateIntAttrType(itemAttrTypes type)
 		case ITEM_ATTRIBUTE_CHARGES:
 		case ITEM_ATTRIBUTE_FLUIDTYPE:
 		case ITEM_ATTRIBUTE_DOORID:
+		case ITEM_ATTRIBUTE_ATTACK:
+		case ITEM_ATTRIBUTE_DEFENSE:
+		case ITEM_ATTRIBUTE_EXTRA_DEFENSE:
+		case ITEM_ATTRIBUTE_ARMOR:
+		case ITEM_ATTRIBUTE_SHOOTRANGE:
+		case ITEM_ATTRIBUTE_HITCHANCE:
 			return true;
 
 		default:

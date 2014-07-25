@@ -1499,6 +1499,12 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_ATTRIBUTE_CHARGES)
 	registerEnum(ITEM_ATTRIBUTE_FLUIDTYPE)
 	registerEnum(ITEM_ATTRIBUTE_DOORID)
+	registerEnum(ITEM_ATTRIBUTE_ATTACK)
+	registerEnum(ITEM_ATTRIBUTE_DEFENSE)
+	registerEnum(ITEM_ATTRIBUTE_EXTRA_DEFENSE)
+	registerEnum(ITEM_ATTRIBUTE_ARMOR)
+	registerEnum(ITEM_ATTRIBUTE_SHOOTRANGE)
+	registerEnum(ITEM_ATTRIBUTE_HITCHANCE)
 
 	registerEnum(ITEM_TYPE_DEPOT)
 	registerEnum(ITEM_TYPE_MAILBOX)
@@ -12392,7 +12398,7 @@ int32_t LuaScriptInterface::luaPartySetSharedExperience(lua_State* L)
 //
 LuaEnvironment::LuaEnvironment() :
 	LuaScriptInterface("Main Interface"), m_testInterface(nullptr),
-	m_lastEventTimerId(0), m_lastCombatId(0), m_lastConditionId(0), m_lastAreaId(0)
+	m_lastEventTimerId(1), m_lastCombatId(0), m_lastConditionId(0), m_lastAreaId(0)
 {
 	//
 }

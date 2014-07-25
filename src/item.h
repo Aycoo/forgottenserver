@@ -86,7 +86,13 @@ enum AttrTypes_t {
 	ATTR_SLEEPERGUID = 20,
 	ATTR_SLEEPSTART = 21,
 	ATTR_CHARGES = 22,
-	ATTR_CONTAINER_ITEMS = 23
+	ATTR_CONTAINER_ITEMS = 23,
+	ATTR_ATTACK = 24,
+	ATTR_DEFENSE = 25,
+	ATTR_EXTRA_DEFENSE = 26,
+	ATTR_ARMOR = 27,
+	ATTR_SHOOTRANGE = 28,
+	ATTR_HITCHANCE = 29
 };
 
 enum Attr_ReadValue {
@@ -202,6 +208,48 @@ class ItemAttributes
 		}
 		ItemDecayState_t getDecaying() const {
 			return (ItemDecayState_t)getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE);
+		}
+
+		void setAttack(int32_t attack) {
+			setIntAttr(ITEM_ATTRIBUTE_ATTACK, attack);
+		}
+		int32_t getAttack() const {
+			return (uint16_t)getIntAttr(ITEM_ATTRIBUTE_ATTACK);
+		}
+
+		void setDefense(int32_t defense) {
+			setIntAttr(ITEM_ATTRIBUTE_DEFENSE, defense);
+		}
+		int32_t getDefense() const {
+			return (uint16_t)getIntAttr(ITEM_ATTRIBUTE_DEFENSE);
+		}
+
+		void setExtraDefense(int32_t extraDefense) {
+			setIntAttr(ITEM_ATTRIBUTE_EXTRA_DEFENSE, extraDefense);
+		}
+		int32_t getExtraDefense() const {
+			return (uint16_t)getIntAttr(ITEM_ATTRIBUTE_EXTRA_DEFENSE);
+		}
+
+		void setArmor(int32_t armor) {
+			setIntAttr(ITEM_ATTRIBUTE_ARMOR, armor);
+		}
+		int32_t getArmor() const {
+			return (uint16_t)getIntAttr(ITEM_ATTRIBUTE_ARMOR);
+		}
+
+		void setShootRange(int32_t shootRange) {
+			setIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE, shootRange);
+		}
+		int32_t getShootRange() const {
+			return (uint16_t)getIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE);
+		}
+
+		void setHitChance(int32_t hitChance) {
+			setIntAttr(ITEM_ATTRIBUTE_DEFENSE, hitChance);
+		}
+		int32_t getHitChance() const {
+			return (uint16_t)getIntAttr(ITEM_ATTRIBUTE_HITCHANCE);
 		}
 
 	protected:
@@ -507,6 +555,66 @@ class Item : virtual public Thing
 			return (ItemDecayState_t)getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE);
 		}
 
+		void setAttack(int32_t attack) {
+			setIntAttr(ITEM_ATTRIBUTE_ATTACK, attack);
+		}
+		int32_t getAttack() const {
+			if (!hasAttribute(ITEM_ATTRIBUTE_ATTACK)) {
+				return items[id].attack;
+			}
+			return (int32_t)getIntAttr(ITEM_ATTRIBUTE_ATTACK);
+		}
+
+		void setDefense(int32_t defense) {
+			setIntAttr(ITEM_ATTRIBUTE_DEFENSE, defense);
+		}
+		int32_t getDefense() const {
+			if (!hasAttribute(ITEM_ATTRIBUTE_DEFENSE)) {
+				return items[id].defense;
+			}
+			return (int32_t)getIntAttr(ITEM_ATTRIBUTE_DEFENSE);
+		}
+
+		void setExtraDefense(int32_t extraDefense) {
+			setIntAttr(ITEM_ATTRIBUTE_EXTRA_DEFENSE, extraDefense);
+		}
+		int32_t getExtraDefense() const {
+			if (!hasAttribute(ITEM_ATTRIBUTE_EXTRA_DEFENSE)) {
+				return items[id].extraDefense;
+			}
+			return (int32_t)getIntAttr(ITEM_ATTRIBUTE_EXTRA_DEFENSE);
+		}
+
+		void setArmor(int32_t armor) {
+			setIntAttr(ITEM_ATTRIBUTE_ARMOR, armor);
+		}
+		int32_t getArmor() const {
+			if (!hasAttribute(ITEM_ATTRIBUTE_ARMOR)) {
+				return items[id].armor;
+			}
+			return (int32_t)getIntAttr(ITEM_ATTRIBUTE_ARMOR);
+		}
+
+		void setShootRange(int32_t shootRange) {
+			setIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE, shootRange);
+		}
+		int32_t getShootRange() const {
+			if (!hasAttribute(ITEM_ATTRIBUTE_SHOOTRANGE)) {
+				return items[id].shootRange;
+			}
+			return (int32_t)getIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE);
+		}
+
+		void setHitChance(int32_t hitChance) {
+			setIntAttr(ITEM_ATTRIBUTE_HITCHANCE, hitChance);
+		}
+		int32_t getHitChance() const {
+			if (!hasAttribute(ITEM_ATTRIBUTE_HITCHANCE)) {
+				return items[id].hitChance;
+			}
+			return (int32_t)getIntAttr(ITEM_ATTRIBUTE_HITCHANCE);
+		}
+
 		static std::string getDescription(const ItemType& it, int32_t lookDistance, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getNameDescription(const ItemType& it, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getWeightDescription(const ItemType& it, double weight, uint32_t count = 1);
@@ -550,12 +658,12 @@ class Item : virtual public Thing
 		Ammo_t	getAmmoType() const {
 			return items[id].ammoType;
 		}
-		int32_t getShootRange() const {
+		/*int32_t getShootRange() const {
 			return items[id].shootRange;
-		}
+		}*/
 
 		virtual double getWeight() const;
-		int32_t getAttack() const {
+		/*int32_t getAttack() const {
 			return items[id].attack;
 		}
 		int32_t getArmor() const {
@@ -566,13 +674,13 @@ class Item : virtual public Thing
 		}
 		int32_t getExtraDefense() const {
 			return items[id].extraDefense;
-		}
+		}*/
 		int32_t getSlotPosition() const {
 			return items[id].slotPosition;
 		}
-		int32_t getHitChance() const {
+		/*int32_t getHitChance() const {
 			return items[id].hitChance;
-		}
+		}*/
 
 		bool isReadable() const {
 			return items[id].canReadText;

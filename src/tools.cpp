@@ -873,6 +873,24 @@ itemAttrTypes stringToItemAttribute(const std::string& str)
 	} else if (str == "doorid") {
 		return ITEM_ATTRIBUTE_DOORID;
 	}
+	else if (str == "attack") {
+		return ITEM_ATTRIBUTE_ATTACK;
+	}
+	else if (str == "defense") {
+		return ITEM_ATTRIBUTE_DEFENSE;
+	}
+	else if (str == "extradefense") {
+		return ITEM_ATTRIBUTE_EXTRA_DEFENSE;
+	}
+	else if (str == "armor") {
+		return ITEM_ATTRIBUTE_ARMOR;
+	}
+	else if (str == "shootrange") {
+		return ITEM_ATTRIBUTE_SHOOTRANGE;
+	}
+	else if (str == "hitchance") {
+		return ITEM_ATTRIBUTE_HITCHANCE;
+	}
 	return ITEM_ATTRIBUTE_NONE;
 }
 
