@@ -29,6 +29,7 @@
 
 extern Game g_game;
 extern Monsters g_monsters;
+extern CreatureEvents* g_creatureEvents;
 
 int32_t Monster::despawnRange;
 int32_t Monster::despawnRadius;
@@ -173,6 +174,9 @@ void Monster::onCreatureAppear(const Creature* creature, bool isLogin)
 void Monster::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout)
 {
 	Creature::onCreatureDisappear(creature, stackpos, isLogout);
+
+	if (isLogout && creature == this)
+		g_creatureEvents->creatureDisappear(this);
 
 	if (mType->creatureDisappearEvent != -1) {
 		// onCreatureDisappear(self, creature)

@@ -37,7 +37,9 @@ enum CreatureEventType_t {
 	CREATURE_EVENT_TEXTEDIT,
 	CREATURE_EVENT_CHANGEHEALTH,
 	CREATURE_EVENT_CHANGEMANA,
-	CREATURE_EVENT_EXTENDED_OPCODE // otclient additional network opcodes
+	CREATURE_EVENT_EXTENDED_OPCODE, // otclient additional network opcodes
+	CREATURE_EVENT_APPEAR,
+	CREATURE_EVENT_DISAPPEAR
 };
 
 class CreatureEvent;
@@ -52,6 +54,8 @@ class CreatureEvents : public BaseEvents
 		bool playerLogin(Player* player) const;
 		bool playerLogout(Player* player) const;
 		bool playerAdvance(Player* player, skills_t, uint32_t, uint32_t);
+		bool creatureAppear(Creature* creature);
+		bool creatureDisappear(Creature* creature);
 
 		CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);
 
@@ -103,6 +107,8 @@ class CreatureEvent : public Event
 		void executeChangeHealth(Creature* creature, Creature* attacker, CombatDamage& damage);
 		void executeChangeMana(Creature* creature, Creature* attacker, int32_t& manaChange, CombatOrigin origin);
 		void executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
+		bool executeOnAppear(Creature* creature);
+		bool executeOnDisappear(Creature* creature);
 		//
 
 	protected:

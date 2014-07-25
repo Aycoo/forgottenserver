@@ -224,6 +224,7 @@ function getOnlinePlayers()
 	end
 	return result
 end
+
 function getPlayersByAccountNumber(accountNumber)
 	local result = {}
 	for _, player in ipairs(Game.getPlayers()) do

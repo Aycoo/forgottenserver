@@ -30,6 +30,7 @@
 
 extern Game g_game;
 extern LuaEnvironment g_luaEnvironment;
+extern CreatureEvents* g_creatureEvents;
 
 enum {
 	EVENT_ID_LOADING = 1,
@@ -267,6 +268,9 @@ void Npc::onCreatureAppear(const Creature* creature, bool isLogin)
 void Npc::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout)
 {
 	Creature::onCreatureDisappear(creature, stackpos, isLogout);
+
+	if (isLogout && creature == this)
+		g_creatureEvents->creatureDisappear(this);
 
 	if (creature == this) {
 		closeAllShopWindows();

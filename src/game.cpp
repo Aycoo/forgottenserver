@@ -59,6 +59,7 @@ extern Spells* g_spells;
 extern Vocations g_vocations;
 extern GlobalEvents* g_globalEvents;
 extern Events* g_events;
+extern CreatureEvents* g_creatureEvents;
 
 Game::Game() :
 	wildcardTree(false),
@@ -570,6 +571,9 @@ bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool e
 	creature->useThing2();
 	creature->setID();
 	creature->addList();
+	if (!creature->getPlayer()) {
+		g_creatureEvents->creatureAppear(creature);
+	}
 	return true;
 }
 

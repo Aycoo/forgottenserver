@@ -143,6 +143,32 @@ bool CreatureEvents::playerAdvance(Player* player, skills_t skill, uint32_t oldL
 	return true;
 }
 
+bool CreatureEvents::creatureAppear(Creature* creature)
+{
+	//fire global event if is registered
+	for (const auto& it : m_creatureEvents) {
+		if (it.second->getEventType() == CREATURE_EVENT_APPEAR) {
+			if (!it.second->executeOnAppear(creature)) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+bool CreatureEvents::creatureDisappear(Creature* creature)
+{
+	//fire global event if is registered
+	for (const auto& it : m_creatureEvents) {
+		if (it.second->getEventType() == CREATURE_EVENT_DISAPPEAR) {
+			if (!it.second->executeOnDisappear(creature)) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 /////////////////////////////////////
 
 CreatureEvent::CreatureEvent(LuaScriptInterface* _interface) :
@@ -195,6 +221,10 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		m_type = CREATURE_EVENT_CHANGEMANA;
 	} else if (tmpStr == "extendedopcode") {
 		m_type = CREATURE_EVENT_EXTENDED_OPCODE;
+	} else if (tmpStr == "appear") {
+		m_type = CREATURE_EVENT_APPEAR;
+	} else if (tmpStr == "disappear") {
+		m_type = CREATURE_EVENT_DISAPPEAR;
 	} else {
 		std::cout << "[Error - CreatureEvent::configureEvent] Invalid type for creature event: " << m_eventName << std::endl;
 		return false;
@@ -243,6 +273,12 @@ std::string CreatureEvent::getScriptEventName()
 
 		case CREATURE_EVENT_EXTENDED_OPCODE:
 			return "onExtendedOpcode";
+
+		case CREATURE_EVENT_APPEAR:
+			return "onAppear";
+
+		case CREATURE_EVENT_DISAPPEAR:
+			return "onDisappear";
 
 		case CREATURE_EVENT_NONE:
 		default:
@@ -581,4 +617,42 @@ void CreatureEvent::executeExtendedOpcode(Player* player, uint8_t opcode, const 
 	LuaScriptInterface::pushString(L, buffer);
 
 	m_scriptInterface->callVoidFunction(3);
+}
+
+bool CreatureEvent::executeOnAppear(Creature* creature)
+{
+	//onAppear(cid)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeOnAppear] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(m_scriptId, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(m_scriptId);
+	lua_pushnumber(L, creature->getID());
+
+	return m_scriptInterface->callFunction(1);
+}
+
+bool CreatureEvent::executeOnDisappear(Creature* creature)
+{
+	//onDisappear(cid)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeOnDisappear] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(m_scriptId, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(m_scriptId);
+	lua_pushnumber(L, creature->getID());
+
+	return m_scriptInterface->callFunction(1);
 }
