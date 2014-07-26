@@ -1,9 +1,5 @@
 function onSay(cid, words, param)
 	local player = Player(cid)
-	if player:getAccountType() <= ACCOUNT_TYPE_TUTOR then
-		return true
-	end
-
 	local target = Player(param)
 	if target == nil then
 		player:sendCancelMessage("A player with that name is not online.")

@@ -1,9 +1,5 @@
 function onSay(cid, words, param)
 	local player = Player(cid)
-	if not player:getGroup():getAccess() then
-		return true
-	end
-
 	local effect = tonumber(param)
 	local orig = player:getPosition()
 	local d1, d2 = {z = orig.z}, {z = orig.z}

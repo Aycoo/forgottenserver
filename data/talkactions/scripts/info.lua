@@ -1,15 +1,5 @@
 function onSay(cid, words, param)
 	local player = Player(cid)	
-	if not player:getGroup():getAccess() then
-		return true
-	end
-
-	local target = Player(param)
-	if not target then
-		player:sendCancelMessage("Player not found.")
-		return false
-	end
-
 	if target:getAccountType() > player:getAccountType() then
 		player:sendCancelMessage("You can not get info about this player.")
 		return false

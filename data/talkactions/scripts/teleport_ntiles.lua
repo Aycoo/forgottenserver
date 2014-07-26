@@ -1,9 +1,5 @@
 function onSay(cid, words, param)
 	local player = Player(cid)
-	if not player:getGroup():getAccess() then
-		return true
-	end
-	
 	local steps = tonumber(param)
 	if not steps then
 		return false

@@ -79,6 +79,16 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 	size_t wordsLength = words.length();
 	for (TalkAction* talkAction : talkActions) {
 		const std::string& talkactionWords = talkAction->getWords();
+		if (words == talkactionWords) {
+			if (talkAction->getAccess() > player->getGroup()->id) {
+				player->sendTextMessage(MESSAGE_STATUS_SMALL, "You can not execute this command.");
+				return TALKACTION_BREAK;
+			}
+			if (talkAction->getAccountType() > player->getAccountType()) {
+				player->sendTextMessage(MESSAGE_STATUS_SMALL, "You can not execute this command.");
+				return TALKACTION_BREAK;
+			}
+		}
 		size_t talkactionLength = talkactionWords.length();
 		if (wordsLength < talkactionLength || strncasecmp(words.c_str(), talkactionWords.c_str(), talkactionLength) != 0) {
 			continue;
@@ -117,6 +127,8 @@ TalkAction::TalkAction(LuaScriptInterface* _interface) :
 	Event(_interface)
 {
 	separator = '"';
+	access = 1;
+	accountType = ACCOUNT_TYPE_NORMAL;
 }
 
 TalkAction::~TalkAction()
@@ -135,6 +147,16 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 	pugi::xml_attribute separatorAttribute = node.attribute("separator");
 	if (separatorAttribute) {
 		separator = pugi::cast<char>(separatorAttribute.value());
+	}
+
+	pugi::xml_attribute accessAttribute = node.attribute("groupId");
+	if (accessAttribute) {
+		access = pugi::cast<uint32_t>(accessAttribute.value());
+	}
+
+	pugi::xml_attribute accountTypeAttribute = node.attribute("accountType");
+	if (accountTypeAttribute) {
+		accountType = (AccountType_t)pugi::cast<uint32_t>(accountTypeAttribute.value());
 	}
 
 	words = wordsAttribute.as_string();

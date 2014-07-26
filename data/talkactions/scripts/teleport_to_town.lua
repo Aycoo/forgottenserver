@@ -1,9 +1,5 @@
 function onSay(cid, words, param)
 	local player = Player(cid)
-	if not player:getGroup():getAccess() then
-		return true
-	end
-
 	local town = Town(param)
 	if town == nil then
 		player:sendCancelMessage("Town not found.")

@@ -1,13 +1,5 @@
 function onSay(cid, words, param)
 	local player = Player(cid)
-	if not player:getGroup():getAccess() then
-		return true
-	end
-
-	if player:getAccountType() < ACCOUNT_TYPE_GOD then
-		return false
-	end
-
 	local house = House(getTileHouseInfo(player:getPosition()))	
 	if house == nil then
 		player:sendCancelMessage("You are not inside a house.")
