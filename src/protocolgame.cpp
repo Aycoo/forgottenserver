@@ -773,7 +773,6 @@ void ProtocolGame::parseOpenPrivateChannel(NetworkMessage& msg)
 void ProtocolGame::parseAutoWalk(NetworkMessage& msg)
 {
 	std::list<Direction> path;
-
 	uint8_t numdirs = msg.GetByte();
 	for (uint8_t i = 0; i < numdirs; ++i) {
 		uint8_t rawdir = msg.GetByte();

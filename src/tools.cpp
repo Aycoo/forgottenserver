@@ -852,7 +852,14 @@ itemAttrTypes stringToItemAttribute(const std::string& str)
 		return ITEM_ATTRIBUTE_UNIQUEID;
 	} else if (str == "description") {
 		return ITEM_ATTRIBUTE_DESCRIPTION;
-	} else if (str == "text") {
+	}
+	else if (str == "name") {
+		return ITEM_ATTRIBUTE_NAME;
+	}
+	else if (str == "article") {
+		return ITEM_ATTRIBUTE_ARTICLE;
+	}
+	else if (str == "text") {
 		return ITEM_ATTRIBUTE_TEXT;
 	} else if (str == "date") {
 		return ITEM_ATTRIBUTE_DATE;

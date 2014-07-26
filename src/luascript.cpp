@@ -1505,6 +1505,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_ATTRIBUTE_ARMOR)
 	registerEnum(ITEM_ATTRIBUTE_SHOOTRANGE)
 	registerEnum(ITEM_ATTRIBUTE_HITCHANCE)
+	registerEnum(ITEM_ATTRIBUTE_NAME)
+	registerEnum(ITEM_ATTRIBUTE_ARTICLE)
 
 	registerEnum(ITEM_TYPE_DEPOT)
 	registerEnum(ITEM_TYPE_MAILBOX)
@@ -6611,13 +6613,16 @@ int32_t LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 		attribute = ITEM_ATTRIBUTE_NONE;
 	}
 
-	if (attribute & 0x7F0013) { // All integer attributes
+	if (attribute != ITEM_ATTRIBUTE_NONE && isNumber(L, 3)) { // All integer attributes
+		std::cout << "goes into int" << std::endl;
 		item->setIntAttr(attribute, getNumber<int32_t>(L, 3));
 		pushBoolean(L, true);
-	} else if (attribute & 0x2C) { // All string attributes
+	} else if (attribute != ITEM_ATTRIBUTE_NONE && isString(L, 3)) { // All string attributes
+		std::cout << "goes into string" << std::endl;
 		item->setStrAttr(attribute, getString(L, 3));
 		pushBoolean(L, true);
 	} else {
+		std::cout << "invalid type or not string / int" << std::endl;
 		lua_pushnil(L);
 	}
 	return 1;

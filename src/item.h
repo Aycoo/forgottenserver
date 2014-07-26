@@ -92,7 +92,9 @@ enum AttrTypes_t {
 	ATTR_EXTRA_DEFENSE = 26,
 	ATTR_ARMOR = 27,
 	ATTR_SHOOTRANGE = 28,
-	ATTR_HITCHANCE = 29
+	ATTR_HITCHANCE = 29,
+	ATTR_NAME = 30,
+	ATTR_ARTICLE = 31
 };
 
 enum Attr_ReadValue {
@@ -250,6 +252,20 @@ class ItemAttributes
 		}
 		int32_t getHitChance() const {
 			return (uint16_t)getIntAttr(ITEM_ATTRIBUTE_HITCHANCE);
+		}
+
+		void setName(const std::string& name) {
+			setStrAttr(ITEM_ATTRIBUTE_NAME, name);
+		}
+		const std::string& getName() const {
+			return getStrAttr(ITEM_ATTRIBUTE_NAME);
+		}
+
+		void setArticle(const std::string& article) {
+			setStrAttr(ITEM_ATTRIBUTE_ARTICLE, article);
+		}
+		const std::string& getArticle() const {
+			return getStrAttr(ITEM_ATTRIBUTE_ARTICLE);
 		}
 
 	protected:
@@ -615,6 +631,26 @@ class Item : virtual public Thing
 			return (int32_t)getIntAttr(ITEM_ATTRIBUTE_HITCHANCE);
 		}
 
+		void setName(const std::string& name) {
+			setStrAttr(ITEM_ATTRIBUTE_NAME, name);
+		}
+		const std::string& getName() const {
+			if (!hasAttribute(ITEM_ATTRIBUTE_NAME)) {
+				return items[id].name;
+			}
+			return getStrAttr(ITEM_ATTRIBUTE_NAME);
+		}
+
+		void setArticle(const std::string& article) {
+			setStrAttr(ITEM_ATTRIBUTE_ARTICLE, article);
+		}
+		const std::string& getArticle() const {
+			if (!hasAttribute(ITEM_ATTRIBUTE_ARTICLE)) {
+				return items[id].article;
+			}
+			return getStrAttr(ITEM_ATTRIBUTE_ARTICLE);
+		}
+
 		static std::string getDescription(const ItemType& it, int32_t lookDistance, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getNameDescription(const ItemType& it, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getWeightDescription(const ItemType& it, double weight, uint32_t count = 1);
@@ -658,29 +694,11 @@ class Item : virtual public Thing
 		Ammo_t	getAmmoType() const {
 			return items[id].ammoType;
 		}
-		/*int32_t getShootRange() const {
-			return items[id].shootRange;
-		}*/
 
 		virtual double getWeight() const;
-		/*int32_t getAttack() const {
-			return items[id].attack;
-		}
-		int32_t getArmor() const {
-			return items[id].armor;
-		}
-		int32_t getDefense() const {
-			return items[id].defense;
-		}
-		int32_t getExtraDefense() const {
-			return items[id].extraDefense;
-		}*/
 		int32_t getSlotPosition() const {
 			return items[id].slotPosition;
 		}
-		/*int32_t getHitChance() const {
-			return items[id].hitChance;
-		}*/
 
 		bool isReadable() const {
 			return items[id].canReadText;
@@ -770,15 +788,8 @@ class Item : virtual public Thing
 		bool floorChangeWest() const {
 			return items[id].floorChangeWest;
 		}
-
-		const std::string& getName() const {
-			return items[id].name;
-		}
 		const std::string getPluralName() const {
 			return items[id].getPluralName();
-		}
-		const std::string& getArticle() const {
-			return items[id].article;
 		}
 
 		// get the number of items

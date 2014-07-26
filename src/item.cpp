@@ -530,6 +530,26 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
+		case ATTR_NAME: {
+			std::string _name;
+			if (!propStream.GET_STRING(_name)) {
+				return ATTR_READ_ERROR;
+			}
+
+			setName(_name);
+			break;
+		}
+
+		case ATTR_ARTICLE: {
+			std::string _article;
+			if (!propStream.GET_STRING(_article)) {
+				return ATTR_READ_ERROR;
+			}
+
+			setArticle(_article);
+			break;
+		}
+
 		//these should be handled through derived classes
 		//If these are called then something has changed in the items.xml since the map was saved
 		//just read the values
@@ -712,6 +732,18 @@ bool Item::serializeAttr(PropWriteStream& propWriteStream) const
 		propWriteStream.ADD_ULONG(hitChance);
 	}
 
+	const std::string& name = getStrAttr(ITEM_ATTRIBUTE_NAME);
+	if (!name.empty()) {
+		propWriteStream.ADD_UCHAR(ATTR_NAME);
+		propWriteStream.ADD_STRING(name);
+	}
+
+	const std::string& article = getStrAttr(ITEM_ATTRIBUTE_ARTICLE);
+	if (!article.empty()) {
+		propWriteStream.ADD_UCHAR(ATTR_ARTICLE);
+		propWriteStream.ADD_STRING(article);
+	}
+
 	return true;
 }
 
@@ -792,7 +824,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			}
 
 			if (it.hitChance != 0) {
-				s << ", Hit%" << std::showpos << (item->getHitChance() == 0 ? it.hitChance : item->getHitChance()) << std::noshowpos;
+				s << ", Hit%" << std::showpos << item->getHitChance() << std::noshowpos;
 			}
 
 			s << ')';
@@ -808,7 +840,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				}
 			}
 
-			if (it.defense != 0 || it.extraDefense != 0) {
+			if (it.defense != 0 || it.extraDefense != 0 || item->getExtraDefense() != 0) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -818,7 +850,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 
 				s << "Def:" << (item->getDefense() == 0 ? it.defense : item->getDefense());
 
-				if (it.extraDefense != 0) {
+				if (it.extraDefense != 0 || item->getExtraDefense() != 0) {
 					s << ' ' << std::showpos << (item->getExtraDefense() == 0 ? it.extraDefense : item->getExtraDefense()) << std::noshowpos;
 				}
 			}
@@ -961,12 +993,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			}
 		}
 	} else if (it.armor || it.showAttributes) {
-		int32_t tmp = it.armor;
-
-		if (item->getArmor() != 0) {
-			tmp = item->getArmor();
-		}
-
+		int32_t tmp = item->getArmor();
 		bool begin = true;
 
 		if (tmp != 0) {
@@ -1322,12 +1349,14 @@ std::string Item::getNameDescription(const ItemType& it, const Item* item /*= nu
 			}
 
 			s << it.getPluralName();
-		} else {
-			if (addArticle && !it.article.empty()) {
-				s << it.article << ' ';
+		} 
+		else
+		{
+			if (addArticle && !item->getArticle().empty())
+			{
+				s << item->getArticle() << ' ';
 			}
-
-			s << it.name;
+			s << item->getName();
 		}
 	} else {
 		s << "an item of type " << it.id;
@@ -1542,6 +1571,8 @@ bool ItemAttributes::validateStrAttrType(itemAttrTypes type)
 		case ITEM_ATTRIBUTE_DESCRIPTION:
 		case ITEM_ATTRIBUTE_TEXT:
 		case ITEM_ATTRIBUTE_WRITER:
+		case ITEM_ATTRIBUTE_NAME:
+		case ITEM_ATTRIBUTE_ARTICLE:
 			return true;
 
 		default:
