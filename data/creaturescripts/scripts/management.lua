@@ -92,8 +92,8 @@ local skillsOptions =
 	[1] = "Club Fighting",
 	[2] = "Sword Fighting",
 	[3] = "Axe Fighting",
-	[4] = "Distance Combat",
-	[5] = "Shield",
+	[4] = "Distance Fighting",
+	[5] = "Shielding",
 	[6] = "Fishing"
 }
 

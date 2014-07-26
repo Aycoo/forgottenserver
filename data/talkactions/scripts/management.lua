@@ -1,5 +1,11 @@
 function onSay(cid, words, param)
 	local player = Player(cid)
+	if not player:getGroup():getAccess() then
+		return true
+	end
+	if player:getAccountType() < ACCOUNT_TYPE_GOD then
+		return true
+	end
 	managementChoices[1] = {}; managementChoices[1].id = 1; managementChoices[1].text = "Players (".. #getOnlinePlayers() ..")"
 	managementChoices[2] = {}; managementChoices[2].id = 2; managementChoices[2].text = "NPCs (".. Game.getNpcCount() ..")"
 	managementChoices[3] = {}; managementChoices[3].id = 3; managementChoices[3].text = "Monsters (".. Game.getMonsterCount() ..") (NOT FINISHED)"
