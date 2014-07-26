@@ -6614,15 +6614,12 @@ int32_t LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 	}
 
 	if (attribute != ITEM_ATTRIBUTE_NONE && isNumber(L, 3)) { // All integer attributes
-		std::cout << "goes into int" << std::endl;
 		item->setIntAttr(attribute, getNumber<int32_t>(L, 3));
 		pushBoolean(L, true);
 	} else if (attribute != ITEM_ATTRIBUTE_NONE && isString(L, 3)) { // All string attributes
-		std::cout << "goes into string" << std::endl;
 		item->setStrAttr(attribute, getString(L, 3));
 		pushBoolean(L, true);
 	} else {
-		std::cout << "invalid type or not string / int" << std::endl;
 		lua_pushnil(L);
 	}
 	return 1;
