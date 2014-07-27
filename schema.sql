@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `skill_shielding_tries` bigint(20) unsigned NOT NULL DEFAULT 0,
   `skill_fishing` int(10) unsigned NOT NULL DEFAULT 10,
   `skill_fishing_tries` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `max_summons` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE,
@@ -321,7 +322,7 @@ CREATE TABLE IF NOT EXISTS `server_config` (
   PRIMARY KEY `config` (`config`)
 ) ENGINE=InnoDB;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '18'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '19'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 CREATE TABLE IF NOT EXISTS `tile_store` (
   `house_id` int(11) NOT NULL,
