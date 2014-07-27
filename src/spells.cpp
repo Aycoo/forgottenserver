@@ -1615,7 +1615,7 @@ bool InstantSpell::SummonMonster(const InstantSpell* spell, Creature* creature, 
 			return false;
 		}
 
-		if (player->getSummonCount() >= 2) {
+		if (player->getSummonCount() >= g_config.getNumber(ConfigManager::MAX_SUMMONS)) {
 			player->sendCancel("You cannot summon more creatures.");
 			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 			return false;
