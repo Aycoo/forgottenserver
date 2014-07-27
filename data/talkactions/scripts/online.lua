@@ -3,9 +3,7 @@ function onSay(cid, words, param)
 	local hasAccess = player:getGroup():getAccess()
 	local players = Game.getPlayers()
 	local playerCount = Game.getPlayerCount()
-
 	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, playerCount .. " players online.")
-
 	local i = 0
 	local msg = ""
 	for k, tmpPlayer in ipairs(players) do

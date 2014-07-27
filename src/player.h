@@ -492,6 +492,13 @@ class Player : public Creature, public Cylinder
 			}
 		}
 
+		void setMaxSummons(uint32_t max) {
+			maxSummons = max;
+		}
+		uint32_t getMaxSummons() const {
+			return maxSummons;
+		}
+
 		virtual int32_t getMaxHealth() const {
 			return getPlayerInfo(PLAYERINFO_MAXHEALTH);
 		}
@@ -1288,6 +1295,7 @@ class Player : public Creature, public Cylinder
 		uint32_t soul;
 		uint32_t soulMax;
 		uint32_t manaMax;
+		uint32_t maxSummons;
 		uint32_t skills[SKILL_LAST + 1][3];
 		int32_t varSkills[SKILL_LAST + 1];
 		int32_t varStats[STAT_LAST + 1];

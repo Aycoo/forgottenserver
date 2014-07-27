@@ -183,6 +183,8 @@ Player::Player(ProtocolGame* p) :
 	nextUseStaminaTime = 0;
 
 	lastQuestlogUpdate = 0;
+
+	maxSummons = 0;
 }
 
 Player::~Player()

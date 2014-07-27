@@ -2230,6 +2230,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getContainerById", LuaScriptInterface::luaPlayerGetContainerById);
 	registerMethod("Player", "getContainerIndex", LuaScriptInterface::luaPlayerGetContainerIndex);
 
+	registerMethod("Player", "getMaxSummons", LuaScriptInterface::luaPlayerGetMaxSummons);
+	registerMethod("Player", "setMaxSummons", LuaScriptInterface::luaPlayerSetMaxSummons);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -9634,6 +9637,34 @@ int32_t LuaScriptInterface::luaPlayerGetContainerIndex(lua_State* L)
 	if (player) {
 		lua_pushnumber(L, player->getContainerIndex(getNumber<uint8_t>(L, 2)));
 	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetMaxSummons(lua_State* L)
+{
+	// player:getMaxSummons()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getMaxSummons());
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSetMaxSummons(lua_State* L)
+{
+	// monsterType:getMaxSummons()
+	uint8_t max = getNumber<uint8_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->setMaxSummons(max);
+		lua_pushboolean(L, true);
+	}
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
