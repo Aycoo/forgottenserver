@@ -52,6 +52,14 @@ class Events
 		bool eventPlayerOnGainExperience(Player* player, Creature* target, uint64_t &exp);
 		bool eventPlayerOnLoseExperience(Player* player, uint64_t &exp);
 
+		// Creature
+		bool eventCreatureOnTarget(Creature* creature, Creature* target);
+		bool eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& newOutfit, const Outfit_t& oldOutfit);
+		bool eventCreatureOnAttack(Creature* creature, Creature* target);
+		void eventCreatureOnHear(Creature* creature, Creature* sayCreature, const std::string words, enum SpeakClasses type, Position pos);
+
+		// Monster
+
 	private:
 		LuaScriptInterface scriptInterface;
 
@@ -72,6 +80,12 @@ class Events
 		int32_t playerOnTradeRequest;
 		int32_t playerOnGainExperience;
 		int32_t playerOnLoseExperience;
+
+		// Creature
+		int32_t creatureOnTarget;
+		int32_t creatureOnChangeOutfit;
+		int32_t creatureOnAttack;
+		int32_t creatureOnHear;
 };
 
 #endif

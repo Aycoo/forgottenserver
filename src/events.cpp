@@ -52,6 +52,12 @@ void Events::clear()
 	playerOnTradeRequest = -1;
 	playerOnGainExperience = -1;
 	playerOnLoseExperience = -1;
+
+	// Creature
+	creatureOnTarget = -1;
+	creatureOnChangeOutfit = -1;
+	creatureOnAttack = -1;
+	creatureOnHear = -1;
 }
 
 bool Events::load()
@@ -115,6 +121,23 @@ bool Events::load()
 					playerOnLoseExperience = event;
 				} else {
 					std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
+				}
+			}
+			else if (className == "Creature") {
+				if (methodName == "onTarget") {
+					creatureOnTarget = event;
+				}
+				else if (methodName == "onChangeOutfit") {
+					creatureOnChangeOutfit = event;
+				}
+				else if (methodName == "onAttack") {
+					creatureOnAttack = event;
+				}
+				else if (methodName == "onHear") {
+					creatureOnHear = event;
+				}
+				else {
+					std::cout << "[Warning - Events::load] Unknown creature method: " << methodName << std::endl;
 				}
 			} else {
 				std::cout << "[Warning - Events::load] Unknown class: " << className << std::endl;
@@ -547,4 +570,116 @@ bool Events::eventPlayerOnLoseExperience(Player* player, uint64_t &exp)
 	}
 	lua_pop(L, 1);
 	return exp != 0;
+}
+
+bool Events::eventCreatureOnTarget(Creature* creature, Creature* target)
+{
+	// Creature:onTarget(target)
+	if (creatureOnTarget == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventCreatureOnTarget] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(creatureOnTarget, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(creatureOnTarget);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, target);
+	LuaScriptInterface::setCreatureMetatable(L, -1, target);
+
+	return scriptInterface.callFunction(2);
+}
+
+bool Events::eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& newOutfit, const Outfit_t& oldOutfit)
+{
+	// Creature:onChangeOutfit(newOutfit, oldOutfit)
+	if (creatureOnChangeOutfit == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventCreatureOnChangeOutfit] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(creatureOnChangeOutfit, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(creatureOnChangeOutfit);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+
+	LuaScriptInterface::pushOutfit(L, newOutfit);
+	LuaScriptInterface::pushOutfit(L, oldOutfit);
+
+	return scriptInterface.callFunction(3);
+}
+
+bool Events::eventCreatureOnAttack(Creature* creature, Creature* target)
+{
+	// Creature:onAttack(target)
+	if (creatureOnAttack == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventCreatureOnAttack] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(creatureOnAttack, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(creatureOnAttack);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, target);
+	LuaScriptInterface::setCreatureMetatable(L, -1, target);
+
+	return scriptInterface.callFunction(2);
+}
+
+void Events::eventCreatureOnHear(Creature* creature, Creature* sayCreature, const std::string words, SpeakClasses type, Position pos)
+{
+	// Creature:onHear(sayCreature, words, type, pos)
+	if (creatureOnHear == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventCreatureOnHear] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(creatureOnHear, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(creatureOnHear);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, sayCreature);
+	LuaScriptInterface::setCreatureMetatable(L, -1, sayCreature);
+
+	LuaScriptInterface::pushString(L, words);
+	lua_pushnumber(L, type);
+	LuaScriptInterface::pushPosition(L, pos);
+
+	scriptInterface.callFunction(5);
 }

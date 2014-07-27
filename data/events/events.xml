@@ -15,6 +15,12 @@
 	<event class="Player" method="onMoveCreature" enabled="0"/>
 	<event class="Player" method="onTurn" enabled="0"/>
 	<event class="Player" method="onTradeRequest" enabled="0"/>
-	<event class="Player" method="onGainExperience" enabled="1"/>
-	<event class="Player" method="onLoseExperience" enabled="1"/>
+	<event class="Player" method="onGainExperience" enabled="0"/>
+	<event class="Player" method="onLoseExperience" enabled="0"/>
+	
+	<!-- Creature methods -->
+	<event class="Creature" method="onTarget" enabled ="0"/>
+	<event class="Creature" method="onChangeOutfit" enabled="0"/>
+	<event class="Creature" method="onAttack" enabled="0"/>
+	<event class="Creature" method="onHear" enabled="0"/>
 </events>

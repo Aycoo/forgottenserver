@@ -3669,6 +3669,9 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 	//event method
 	for (Creature* spectator : list) {
 		spectator->onCreatureSay(creature, type, text);
+		if (creature != spectator) {
+			g_events->eventCreatureOnHear(spectator, creature, text, type, creature->getPosition());
+		}
 	}
 	return true;
 }
@@ -3761,6 +3764,10 @@ void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 
 void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outfit)
 {
+	if (!g_events->eventCreatureOnChangeOutfit(creature, outfit, creature->getCurrentOutfit())) {
+		return;
+	}
+
 	creature->setCurrentOutfit(outfit);
 
 	if (creature->isInvisible()) {
