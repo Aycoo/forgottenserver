@@ -128,7 +128,6 @@ bool ConfigManager::load()
 	m_confInteger[CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES] = getGlobalNumber(L, "checkExpiredMarketOffersEachMinutes", 60);
 	m_confInteger[MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER] = getGlobalNumber(L, "maxMarketOffersAtATimePerPlayer", 100);
 	m_confInteger[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 25);
-	m_confInteger[MAX_SUMMONS] = getGlobalNumber(L, "maxSummons", 2);
 
 	m_isLoaded = true;
 	lua_close(L);
