@@ -151,6 +151,10 @@ Player::Player(ProtocolGame* p) :
 		varStats[i] = 0;
 	}
 
+	for (int32_t i = SKILL_FIRST; i <= SKILL_LEVEL; ++i) {
+		rates[i] = 1.0f;
+	}
+
 	maxDepotItems = 1000;
 	maxVipEntries = 20;
 
@@ -616,6 +620,8 @@ void Player::addSkillAdvance(skills_t skill, uint32_t count)
 	if (count == 0) {
 		return;
 	}
+
+	count = (uint32_t)(count * rates[skill]);
 
 	uint64_t currReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILLVALUE_LEVEL]);
 	uint64_t nextReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILLVALUE_LEVEL] + 1);
@@ -1741,6 +1747,8 @@ void Player::addManaSpent(uint64_t amount)
 	if (amount == 0 || hasFlag(PlayerFlag_NotGainMana)) {
 		return;
 	}
+
+	amount = (uint64_t)(amount * rates[SKILL_MAGLEVEL]);
 
 	uint64_t currReqMana = vocation->getReqMana(magLevel);
 	uint64_t nextReqMana = vocation->getReqMana(magLevel + 1);
@@ -3763,6 +3771,8 @@ void Player::gainExperience(Creature* target, uint64_t gainExp)
 		}
 
 		uint64_t oldExperience = experience;
+
+		gainExp = (uint64_t)(gainExp * rates[SKILL_LEVEL]);
 
 		addExperience(target, gainExp * g_game.getExperienceStage(level), true, true);
 

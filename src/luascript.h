@@ -995,6 +995,9 @@ class LuaScriptInterface
 		static int32_t luaPlayerGetMaxSummons(lua_State* L);
 		static int32_t luaPlayerSetMaxSummons(lua_State* L);
 
+		static int32_t luaPlayerGetRate(lua_State* L);
+		static int32_t luaPlayerSetRate(lua_State* L);
+
 		// Monster
 		static int32_t luaMonsterCreate(lua_State* L);
 
