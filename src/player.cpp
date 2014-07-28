@@ -1805,6 +1805,8 @@ void Player::addExperience(Creature* target, uint64_t exp, bool sendText/* = fal
 		return;
 	}
 
+	exp *= rates[SKILL_LEVEL];
+
 	if (applyStaminaChange && g_config.getBoolean(ConfigManager::STAMINA_SYSTEM)) {
 		if (staminaMinutes > 2400) {
 			if (isPremium()) {
@@ -3768,7 +3770,7 @@ void Player::gainExperience(Creature* target, uint64_t gainExp)
 
 		uint64_t oldExperience = experience;
 
-		addExperience(target, gainExp * rates[SKILL_LEVEL], true, true);
+		addExperience(target, gainExp, true, true);
 
 		//soul regeneration
 		int64_t gainedExperience = experience - oldExperience;
