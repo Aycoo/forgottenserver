@@ -151,6 +151,10 @@ Player::Player(ProtocolGame* p) :
 		varStats[i] = 0;
 	}
 
+	for (int32_t i = SKILL_FIRST; i <= SKILL_LEVEL; ++i) {
+		rates[i] = 1.0f;
+	}
+
 	maxDepotItems = 1000;
 	maxVipEntries = 20;
 
@@ -1807,6 +1811,8 @@ void Player::addExperience(Creature* target, uint64_t exp, bool sendText/* = fal
 		return;
 	}
 
+	exp *= rates[SKILL_LEVEL];
+
 	if (applyStaminaChange && g_config.getBoolean(ConfigManager::STAMINA_SYSTEM)) {
 		if (staminaMinutes > 2400) {
 			if (isPremium()) {
@@ -1988,7 +1994,7 @@ void Player::onBlockHit()
 		--shieldBlockCount;
 
 		if (hasShield()) {
-			addSkillAdvance(SKILL_SHIELD, g_config.getNumber(ConfigManager::RATE_SKILL));
+			addSkillAdvance(SKILL_SHIELD, rates[ SKILL_SHIELD ]);
 		}
 	}
 }
