@@ -621,8 +621,6 @@ void Player::addSkillAdvance(skills_t skill, uint32_t count)
 		return;
 	}
 
-	count = (uint32_t)(count * rates[skill]);
-
 	uint64_t currReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILLVALUE_LEVEL]);
 	uint64_t nextReqTries = vocation->getReqSkillTries(skill, skills[skill][SKILLVALUE_LEVEL] + 1);
 	if (currReqTries >= nextReqTries) {
@@ -1748,8 +1746,6 @@ void Player::addManaSpent(uint64_t amount)
 		return;
 	}
 
-	amount = (uint64_t)(amount * rates[SKILL_MAGLEVEL]);
-
 	uint64_t currReqMana = vocation->getReqMana(magLevel);
 	uint64_t nextReqMana = vocation->getReqMana(magLevel + 1);
 	if (currReqMana >= nextReqMana) {
@@ -1990,7 +1986,7 @@ void Player::onBlockHit()
 		--shieldBlockCount;
 
 		if (hasShield()) {
-			addSkillAdvance(SKILL_SHIELD, g_config.getNumber(ConfigManager::RATE_SKILL));
+			addSkillAdvance(SKILL_SHIELD, rates[ SKILL_SHIELD ]);
 		}
 	}
 }
@@ -3772,9 +3768,7 @@ void Player::gainExperience(Creature* target, uint64_t gainExp)
 
 		uint64_t oldExperience = experience;
 
-		gainExp = (uint64_t)(gainExp * rates[SKILL_LEVEL]);
-
-		addExperience(target, gainExp * g_game.getExperienceStage(level), true, true);
+		addExperience(target, gainExp * rates[SKILL_LEVEL], true, true);
 
 		//soul regeneration
 		int64_t gainedExperience = experience - oldExperience;

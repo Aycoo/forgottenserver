@@ -16,5 +16,14 @@ function onLogin(cid)
 
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("Management")
+	player:registerEvent("AdvanceStages")
+	
+	player:setRate( SKILL_LEVEL, Game:getExperienceStage( player:getLevel( ) ) )
+	player:setRate( SKILL_MAGLEVEL, configManager.getNumber( configKeys.RATE_MAGIC ) ) 
+	
+	for skillType = SKILL_FIST,SKILL_FISHING do
+		player:setRate( skillType, configManager.getNumber( configKeys.RATE_SKILL ) ) 
+	end
+	
 	return true
 end
