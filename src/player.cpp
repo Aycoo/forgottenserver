@@ -928,6 +928,10 @@ bool Player::canSee(const Position& pos) const
 
 bool Player::canSeeCreature(const Creature* creature) const
 {
+	if (creature == nullptr) {
+		return false;
+	}
+
 	if (creature == this) {
 		return true;
 	}
@@ -1794,6 +1798,8 @@ void Player::addExperience(Creature* target, uint64_t exp, bool sendText/* = fal
 {
 	uint64_t currLevelExp = Player::getExpForLevel(level);
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
+	uint64_t rawExp = exp;
+	exp *= g_game.getExperienceStage(level);
 	if (currLevelExp >= nextLevelExp) {
 		//player has reached max level
 		levelPercent = 0;
@@ -1811,7 +1817,7 @@ void Player::addExperience(Creature* target, uint64_t exp, bool sendText/* = fal
 		}
 	}
 
-	if (!g_events->eventPlayerOnGainExperience(this, target, exp)) {
+	if (!g_events->eventPlayerOnGainExperience(this, target, exp, rawExp)) {
 		return;
 	}
 
@@ -3764,7 +3770,7 @@ void Player::gainExperience(Creature* target, uint64_t gainExp)
 
 		uint64_t oldExperience = experience;
 
-		addExperience(target, gainExp * g_game.getExperienceStage(level), true, true);
+		addExperience(target, gainExp, true, true);
 
 		//soul regeneration
 		int64_t gainedExperience = experience - oldExperience;
@@ -4031,6 +4037,10 @@ void Player::clearAttacked()
 
 void Player::addUnjustifiedDead(const Player* attacked)
 {
+	if (attacked == nullptr) {
+		return;
+	}
+
 	if (hasFlag(PlayerFlag_NotGainInFight) || attacked == this || g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED) {
 		return;
 	}

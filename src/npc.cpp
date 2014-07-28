@@ -248,6 +248,9 @@ std::string Npc::getDescription(int32_t) const
 
 void Npc::onCreatureAppear(const Creature* creature, bool isLogin)
 {
+	if (creature == nullptr) {
+		return;
+	}
 	Creature::onCreatureAppear(creature, isLogin);
 
 	if (creature == this) {
@@ -267,6 +270,9 @@ void Npc::onCreatureAppear(const Creature* creature, bool isLogin)
 
 void Npc::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool isLogout)
 {
+	if (creature == nullptr) {
+		return;
+	}
 	Creature::onCreatureDisappear(creature, stackpos, isLogout);
 
 	if (isLogout && creature == this)
@@ -287,6 +293,9 @@ void Npc::onCreatureDisappear(const Creature* creature, uint32_t stackpos, bool 
 void Npc::onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
                          const Tile* oldTile, const Position& oldPos, bool teleport)
 {
+	if (creature == nullptr) {
+		return;
+	}
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
 	if (creature == this || creature->getPlayer()) {

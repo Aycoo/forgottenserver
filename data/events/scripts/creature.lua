@@ -1,12 +1,12 @@
-local register = 
+local Register = 
 {
 	target = {},
 	outfit = {},
 	attack = {},
-	hear = {}
+	hear = {} 
 }
 
-local unRegister =
+local UnRegister =
 {
 	target = {},
 	outfit = {},
@@ -18,141 +18,79 @@ local unRegister =
 -- example target = {} in both register and unRegister table.
 -- IMPORTANT names must be lower case example: Demon has to be demon or Evil Hero has to be evil hero.
 -- to enable it for all players / monsters /npcs use "all players" "all monsters" "all npcs"
-function registerTarget(self) 
-	if register.target[1] ~= nil then
-		if self:isPlayer() and not isInArray(register.target, "all players") then
-			if not isInArray(register.target, string.lower(self:getName())) then
-				return true
+function register(self, registerTable)
+	if registerTable[1] ~= nil then
+		if self:isPlayer() and not isInArray(registerTable, "all players") then
+			if not isInArray(registerTable, string.lower(self:getName())) then
+				return false
 			end
-		elseif self:isMonster() and not isInArray(register.target, "all monsters") then
-			if not isInArray(register.target, string.lower(self:getName())) then
-				return true
+		elseif self:isMonster() and not isInArray(registerTable, "all monsters") then
+			if not isInArray(registerTable, string.lower(self:getName())) then
+				return false
 			end
-		elseif self:isNpc() and not isInArray(register.target, "all npcs") then
-			if not isInArray(register.target, string.lower(self:getName())) then
-				return true
+		elseif self:isNpc() and not isInArray(registerTable, "all npcs") then
+			if not isInArray(registerTable, string.lower(self:getName())) then
+				return false
 			end
 		end
 	end
+	return true
 end
 
-function unRegisterTarget(self)
-	if unRegister.target[1] ~= nil then
-		if isInArray(unRegister.target, string.lower(self:getName())) then
+function unRegister(self, unRegisterTable)
+	if unRegisterTable[1] ~= nil then
+		if isInArray(unRegisterTable, string.lower(self:getName())) then
 			return true
 		end
 	end
-end
-
-function registerOutfit(self) 
-	if register.outfit[1] ~= nil then
-		if self:isPlayer() and not isInArray(register.outfit, "all players") then
-			if not isInArray(register.outfit, string.lower(self:getName())) then
-				return true
-			end
-		elseif self:isMonster() and not isInArray(register.outfit, "all monsters") then
-			if not isInArray(register.outfit, string.lower(self:getName())) then
-				return true
-			end
-		elseif self:isNpc() and not isInArray(register.outfit, "all npcs") then
-			if not isInArray(register.outfit, string.lower(self:getName())) then
-				return true
-			end
-		end
-	end
-end
-
-function unRegisterOutfit(self)
-	if unRegister.outfit[1] ~= nil then
-		if isInArray(unRegister.outfit, string.lower(self:getName())) then
-			return true
-		end
-	end
-end
-
-function registerAttack(self) 
-	if register.attack[1] ~= nil then
-		if self:isPlayer() and not isInArray(register.attack, "all players") then
-			if not isInArray(register.attack, string.lower(self:getName())) then
-				return true
-			end
-		elseif self:isMonster() and not isInArray(register.attack, "all monsters") then
-			if not isInArray(register.attack, string.lower(self:getName())) then
-				return true
-			end
-		elseif self:isNpc() and not isInArray(register.attack, "all npcs") then
-			if not isInArray(register.attack, string.lower(self:getName())) then
-				return true
-			end
-		end
-	end
-end
-
-function unRegisterAttack(self)
-	if unRegister.attack[1] ~= nil then
-		if isInArray(unRegister.attack, string.lower(self:getName())) then
-			return true
-		end
-	end
-end
-
-function registerHear(self) 
-	if register.hear[1] ~= nil then
-		if self:isPlayer() and not isInArray(register.hear, "all players") then
-			if not isInArray(register.hear, string.lower(self:getName())) then
-				return true
-			end
-		elseif self:isMonster() and not isInArray(register.hear, "all monsters") then
-			if not isInArray(register.hear, string.lower(self:getName())) then
-				return true
-			end
-		elseif self:isNpc() and not isInArray(register.hear, "all npcs") then
-			if not isInArray(register.hear, string.lower(self:getName())) then
-				return true
-			end
-		end
-	end
-end
-
-function unRegisterHear(self)
-	if unRegister.hear[1] ~= nil then
-		if isInArray(unRegister.hear, string.lower(self:getName())) then
-			return true
-		end
-	end
+	return false
 end
 -- functions end here, please do not edit them!
 
 
 -- Events start from here on!
 function Creature:onTarget(target)
-	registerTarget(self)
-	unRegisterTarget(self)
+	if not register(self, Register.target) then
+		return true
+	end
+	if unRegister(self, UnRegister.target) then
+		return true
+	end
 	-- start scripting from here on.
 	return true
 end
 
 function Creature:onChangeOutfit(newOutfit, oldOutfit)
-	registerOutfit(self)
-	unRegisterOutfit(self)
+	if not register(self, Register.outfit) then
+		return true
+	end
+	if unRegister(self, UnRegister.outfit) then
+		return true
+	end
 	-- return true so the player is able to change his outfit or return false and the old outfit will stay.
 	-- start scripting from here on.
 	return true
 end
 
 function Creature:onAttack(target)
-	registerAttack(self)
-	unRegisterAttack(self)
+	if not register(self, Register.attack) then
+		return true
+	end
+	if unRegister(self, UnRegister.attack) then
+		return true
+	end
 	-- return true and the monster / player / npc can do dmg again.
 	-- start scripting from here on.
 	return true
 end
 
 function Creature:onHear(sayCreature, words, type, pos)
-	registerHear(self)
-	unRegisterHear(self)
+	if not register(self, Register.hear) then
+		return true
+	end
+	if unRegister(self, UnRegister.hear) then
+		return true
+	end
 	-- doesn't need a return value.
 	-- start scripting from here on.
 end
-
-
