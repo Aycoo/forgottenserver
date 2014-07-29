@@ -1798,17 +1798,20 @@ void Player::addManaSpent(uint64_t amount)
 	}
 }
 
-void Player::addExperience(Creature* target, uint64_t exp, bool sendText/* = false*/, bool applyStaminaChange/* = false*/)
+void Player::addExperience(Creature* target, uint64_t exp, bool sendText/* = false*/, bool applyStaminaChange/* = false*/, bool applyMultiplier/* = false*/)
 {
 	uint64_t currLevelExp = Player::getExpForLevel(level);
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
 	uint64_t rawExp = exp;
-	exp *=  (rates[SKILL_LEVEL] == 0.0f ? g_game.getExperienceStage(level) : rates[SKILL_LEVEL]);
 	if (currLevelExp >= nextLevelExp) {
 		//player has reached max level
 		levelPercent = 0;
 		sendStats();
 		return;
+	}
+
+	if (applyMultiplier) {
+		exp *= (rates[SKILL_LEVEL] == 0.0f ? g_game.getExperienceStage(level) : rates[SKILL_LEVEL]);
 	}
 
 	if (applyStaminaChange && g_config.getBoolean(ConfigManager::STAMINA_SYSTEM)) {
@@ -3774,7 +3777,7 @@ void Player::gainExperience(Creature* target, uint64_t gainExp)
 
 		uint64_t oldExperience = experience;
 
-		addExperience(target, gainExp, true, true);
+		addExperience(target, gainExp, true, true, true);
 
 		//soul regeneration
 		int64_t gainedExperience = experience - oldExperience;
