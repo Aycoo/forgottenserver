@@ -69,7 +69,7 @@ class ConfigManager
 			LAST_STRING_CONFIG /* this must be the last one */
 		};
 
-		enum integer_config_t {
+		enum number_config_t {
 			SQL_PORT = 0,
 			MAX_PLAYERS = 1,
 			PZ_LOCKED = 2,
@@ -101,23 +101,25 @@ class ConfigManager
 			MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER = 28,
 			EXP_FROM_PLAYERS_LEVEL_RANGE = 29,
 			MAX_PACKETS_PER_SECOND = 30,
-			LAST_INTEGER_CONFIG /* this must be the last one */
+			LAST_NUMBER_CONFIG /* this must be the last one */
 		};
+
+
 
 		bool load();
 		bool reload();
 
 		const std::string& getString(string_config_t _what) const;
-		int32_t getNumber(integer_config_t _what) const;
+		double getNumber(number_config_t _what) const;
 		bool getBoolean(boolean_config_t _what) const;
 
 	private:
 		static std::string getGlobalString(lua_State* _L, const std::string& _identifier, const std::string& _default = "");
-		static int32_t getGlobalNumber(lua_State* _L, const std::string& _identifier, const int32_t _default = 0);
+		static double getGlobalNumber(lua_State* _L, const std::string& _identifier, const int32_t _default = 0);
 
 		bool m_isLoaded;
 		std::string m_confString[LAST_STRING_CONFIG];
-		int32_t m_confInteger[LAST_INTEGER_CONFIG];
+		double m_confNumber[LAST_NUMBER_CONFIG];
 		bool m_confBoolean[LAST_BOOLEAN_CONFIG];
 };
 

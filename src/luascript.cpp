@@ -4420,7 +4420,7 @@ int32_t LuaScriptInterface::luaConfigManagerGetString(lua_State* L)
 
 int32_t LuaScriptInterface::luaConfigManagerGetNumber(lua_State* L)
 {
-	lua_pushnumber(L, g_config.getNumber(getNumber<ConfigManager::integer_config_t>(L, -1)));
+	lua_pushnumber(L, g_config.getNumber(getNumber<ConfigManager::number_config_t>(L, -1)));
 	return 1;
 }
 

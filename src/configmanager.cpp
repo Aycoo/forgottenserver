@@ -71,12 +71,12 @@ bool ConfigManager::load()
 		m_confString[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "forgottenserver");
 		m_confString[MYSQL_SOCK] = getGlobalString(L, "mysqlSock", "");
 
-		m_confInteger[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
-		m_confInteger[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);
-		m_confInteger[LOGIN_PORT] = getGlobalNumber(L, "loginProtocolPort", 7171);
-		m_confInteger[STATUS_PORT] = getGlobalNumber(L, "statusProtocolPort", 7171);
+		m_confNumber[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
+		m_confNumber[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);
+		m_confNumber[LOGIN_PORT] = getGlobalNumber(L, "loginProtocolPort", 7171);
+		m_confNumber[STATUS_PORT] = getGlobalNumber(L, "statusProtocolPort", 7171);
 
-		m_confInteger[MARKET_OFFER_DURATION] = getGlobalNumber(L, "marketOfferDuration",  30 * 24 * 60 * 60);
+		m_confNumber[MARKET_OFFER_DURATION] = getGlobalNumber(L, "marketOfferDuration",  30 * 24 * 60 * 60);
 	}
 
 	m_confBoolean[ALLOW_CHANGEOUTFIT] = booleanString(getGlobalString(L, "allowChangeOutfit", "yes"));
@@ -102,32 +102,32 @@ bool ConfigManager::load()
 	m_confString[MOTD] = getGlobalString(L, "motd");
 	m_confString[WORLD_TYPE] = getGlobalString(L, "worldType", "pvp");
 
-	m_confInteger[MAX_PLAYERS] = getGlobalNumber(L, "maxPlayers");
-	m_confInteger[PZ_LOCKED] = getGlobalNumber(L, "pzLocked", 60000);
-	m_confInteger[DEFAULT_DESPAWNRANGE] = getGlobalNumber(L, "deSpawnRange", 2);
-	m_confInteger[DEFAULT_DESPAWNRADIUS] = getGlobalNumber(L, "deSpawnRadius", 50);
-	m_confInteger[RATE_EXPERIENCE] = getGlobalNumber(L, "rateExp", 5);
-	m_confInteger[RATE_SKILL] = getGlobalNumber(L, "rateSkill", 3);
-	m_confInteger[RATE_LOOT] = getGlobalNumber(L, "rateLoot", 2);
-	m_confInteger[RATE_MAGIC] = getGlobalNumber(L, "rateMagic", 3);
-	m_confInteger[RATE_SPAWN] = getGlobalNumber(L, "rateSpawn", 1);
-	m_confInteger[HOUSE_PRICE] = getGlobalNumber(L, "housePriceEachSQM", 1000);
-	m_confInteger[KILLS_TO_RED] = getGlobalNumber(L, "killsToRedSkull", 3);
-	m_confInteger[KILLS_TO_BLACK] = getGlobalNumber(L, "killsToBlackSkull", 6);
-	m_confInteger[ACTIONS_DELAY_INTERVAL] = getGlobalNumber(L, "timeBetweenActions", 200);
-	m_confInteger[EX_ACTIONS_DELAY_INTERVAL] = getGlobalNumber(L, "timeBetweenExActions", 1000);
-	m_confInteger[MAX_MESSAGEBUFFER] = getGlobalNumber(L, "maxMessageBuffer", 4);
-	m_confInteger[KICK_AFTER_MINUTES] = getGlobalNumber(L, "kickIdlePlayerAfterMinutes", 15);
-	m_confInteger[PROTECTION_LEVEL] = getGlobalNumber(L, "protectionLevel", 1);
-	m_confInteger[DEATH_LOSE_PERCENT] = getGlobalNumber(L, "deathLosePercent", -1);
-	m_confInteger[STATUSQUERY_TIMEOUT] = getGlobalNumber(L, "statusTimeout", 5000);
-	m_confInteger[FRAG_TIME] = getGlobalNumber(L, "timeToDecreaseFrags", 24 * 60 * 60 * 1000);
-	m_confInteger[WHITE_SKULL_TIME] = getGlobalNumber(L, "whiteSkullTime", 15 * 60 * 1000);
-	m_confInteger[STAIRHOP_DELAY] = getGlobalNumber(L, "stairJumpExhaustion", 2000);
-	m_confInteger[EXP_FROM_PLAYERS_LEVEL_RANGE] = getGlobalNumber(L, "expFromPlayersLevelRange", 75);
-	m_confInteger[CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES] = getGlobalNumber(L, "checkExpiredMarketOffersEachMinutes", 60);
-	m_confInteger[MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER] = getGlobalNumber(L, "maxMarketOffersAtATimePerPlayer", 100);
-	m_confInteger[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 25);
+	m_confNumber[MAX_PLAYERS] = getGlobalNumber(L, "maxPlayers");
+	m_confNumber[PZ_LOCKED] = getGlobalNumber(L, "pzLocked", 60000);
+	m_confNumber[DEFAULT_DESPAWNRANGE] = getGlobalNumber(L, "deSpawnRange", 2);
+	m_confNumber[DEFAULT_DESPAWNRADIUS] = getGlobalNumber(L, "deSpawnRadius", 50);
+	m_confNumber[RATE_EXPERIENCE] = getGlobalNumber(L, "rateExp", 5);
+	m_confNumber[RATE_SKILL] = getGlobalNumber(L, "rateSkill", 3);
+	m_confNumber[RATE_LOOT] = getGlobalNumber(L, "rateLoot", 2);
+	m_confNumber[RATE_MAGIC] = getGlobalNumber(L, "rateMagic", 3);
+	m_confNumber[RATE_SPAWN] = getGlobalNumber(L, "rateSpawn", 1);
+	m_confNumber[HOUSE_PRICE] = getGlobalNumber(L, "housePriceEachSQM", 1000);
+	m_confNumber[KILLS_TO_RED] = getGlobalNumber(L, "killsToRedSkull", 3);
+	m_confNumber[KILLS_TO_BLACK] = getGlobalNumber(L, "killsToBlackSkull", 6);
+	m_confNumber[ACTIONS_DELAY_INTERVAL] = getGlobalNumber(L, "timeBetweenActions", 200);
+	m_confNumber[EX_ACTIONS_DELAY_INTERVAL] = getGlobalNumber(L, "timeBetweenExActions", 1000);
+	m_confNumber[MAX_MESSAGEBUFFER] = getGlobalNumber(L, "maxMessageBuffer", 4);
+	m_confNumber[KICK_AFTER_MINUTES] = getGlobalNumber(L, "kickIdlePlayerAfterMinutes", 15);
+	m_confNumber[PROTECTION_LEVEL] = getGlobalNumber(L, "protectionLevel", 1);
+	m_confNumber[DEATH_LOSE_PERCENT] = getGlobalNumber(L, "deathLosePercent", -1);
+	m_confNumber[STATUSQUERY_TIMEOUT] = getGlobalNumber(L, "statusTimeout", 5000);
+	m_confNumber[FRAG_TIME] = getGlobalNumber(L, "timeToDecreaseFrags", 24 * 60 * 60 * 1000);
+	m_confNumber[WHITE_SKULL_TIME] = getGlobalNumber(L, "whiteSkullTime", 15 * 60 * 1000);
+	m_confNumber[STAIRHOP_DELAY] = getGlobalNumber(L, "stairJumpExhaustion", 2000);
+	m_confNumber[EXP_FROM_PLAYERS_LEVEL_RANGE] = getGlobalNumber(L, "expFromPlayersLevelRange", 75);
+	m_confNumber[CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES] = getGlobalNumber(L, "checkExpiredMarketOffersEachMinutes", 60);
+	m_confNumber[MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER] = getGlobalNumber(L, "maxMarketOffersAtATimePerPlayer", 100);
+	m_confNumber[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 25);
 
 	m_isLoaded = true;
 	lua_close(L);
@@ -157,10 +157,10 @@ const std::string& ConfigManager::getString(string_config_t _what) const
 	}
 }
 
-int32_t ConfigManager::getNumber(integer_config_t _what) const
+double ConfigManager::getNumber(number_config_t _what) const
 {
-	if (m_isLoaded && _what < LAST_INTEGER_CONFIG) {
-		return m_confInteger[_what];
+	if (m_isLoaded && _what < LAST_NUMBER_CONFIG) {
+		return m_confNumber[_what];
 	} else {
 		std::cout << "[Warning - ConfigManager::getNumber] " << _what << std::endl;
 		return 0;
@@ -177,6 +177,7 @@ bool ConfigManager::getBoolean(boolean_config_t _what) const
 	}
 }
 
+
 std::string ConfigManager::getGlobalString(lua_State* _L, const std::string& _identifier, const std::string& _default)
 {
 	lua_getglobal(_L, _identifier.c_str());
@@ -191,7 +192,7 @@ std::string ConfigManager::getGlobalString(lua_State* _L, const std::string& _id
 	return ret;
 }
 
-int32_t ConfigManager::getGlobalNumber(lua_State* _L, const std::string& _identifier, const int32_t _default)
+double ConfigManager::getGlobalNumber(lua_State* _L, const std::string& _identifier, const int32_t _default)
 {
 	lua_getglobal(_L, _identifier.c_str());
 
@@ -199,7 +200,7 @@ int32_t ConfigManager::getGlobalNumber(lua_State* _L, const std::string& _identi
 		return _default;
 	}
 
-	int32_t val = lua_tonumber(_L, -1);
+	double val = lua_tonumber(_L, -1);
 	lua_pop(_L, 1);
 	return val;
 }
