@@ -319,14 +319,14 @@ CREATE TABLE IF NOT EXISTS `player_storage` (
 CREATE TABLE IF NOT EXISTS `player_rates` (
   `player_id` int(11) NOT NULL,
   `level` DOUBLE(6,1) NOT NULL DEFAULT '0.0',
-  `magic_level` DOUBLE(6,1) NOT NULL DEFAULT '0',
-  `fist` DOUBLE(6,1) NOT NULL DEFAULT '0',
-  `club` DOUBLE(6,1) NOT NULL DEFAULT '0',
-  `sword` DOUBLE(6,1) NOT NULL DEFAULT '0',
-  `axe` DOUBLE(6,1) NOT NULL DEFAULT '0',
-  `distance` DOUBLE(6,1) NOT NULL DEFAULT '0',
-  `shield` DOUBLE(6,1) NOT NULL DEFAULT '0',
-  `fish` DOUBLE(6,1) NOT NULL DEFAULT '0',
+  `magic_level` DOUBLE(6,1) NOT NULL DEFAULT '0.0',
+  `fist` DOUBLE(6,1) NOT NULL DEFAULT '0.0',
+  `club` DOUBLE(6,1) NOT NULL DEFAULT '0.0',
+  `sword` DOUBLE(6,1) NOT NULL DEFAULT '0.0',
+  `axe` DOUBLE(6,1) NOT NULL DEFAULT '0.0',
+  `distance` DOUBLE(6,1) NOT NULL DEFAULT '0.0',
+  `shield` DOUBLE(6,1) NOT NULL DEFAULT '0.0',
+  `fish` DOUBLE(6,1) NOT NULL DEFAULT '0.0',
   UNIQUE KEY `player_id` (`player_id`),
   FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
