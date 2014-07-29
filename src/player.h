@@ -1168,11 +1168,11 @@ class Player : public Creature, public Cylinder
 		bool hasLearnedInstantSpell(const std::string& name) const;
 
 		double getRate(skills_t skill){
-			return this->rates[skill];
+			return rates[skill];
 		}
 
 		void setRate(skills_t skill, double value){
-			this->rates[skill] = value;
+			rates[skill] = value;
 		}
 	protected:
 		void checkTradeState(const Item* item);

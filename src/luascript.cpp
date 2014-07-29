@@ -9679,8 +9679,6 @@ int32_t LuaScriptInterface::luaPlayerGetRate(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		uint16_t skillType = getNumber<uint32_t>(L, 2);
-
-
 		lua_pushnumber(L, player->getRate((skills_t)skillType));
 	}
 	else {
@@ -9697,9 +9695,7 @@ int32_t LuaScriptInterface::luaPlayerSetRate(lua_State* L)
 	if (player) {
 		uint16_t skillType = getNumber<uint32_t>(L, 2);
 		double value = getNumber<double>(L, 3);
-
-		player->setRate((skills_t)skillType,value);
-
+		player->setRate((skills_t)skillType, value);
 		pushBoolean(L, true);
 	}
 	else {

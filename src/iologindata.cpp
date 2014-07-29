@@ -520,6 +520,22 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		} while (result->next());
 	}
 
+	//load skill rates
+	query.str("");
+	query << "SELECT `level`, `magic_level`, `fist`, `club`, `sword`, `axe`, `distance`, `shield`, `fish` FROM `player_rates` WHERE `player_id` = " << player->getGUID();
+	if ((result = db->storeQuery(query.str()))) {
+		player->rates[SKILL_LEVEL] = result->getDataInt("level");
+		player->rates[SKILL_MAGLEVEL] = result->getDataInt("magic_level");
+		player->rates[SKILL_FIST] = result->getDataInt("fist");
+		player->rates[SKILL_CLUB] = result->getDataInt("club");
+		player->rates[SKILL_SWORD] = result->getDataInt("sword");
+		player->rates[SKILL_AXE] = result->getDataInt("axe");
+		player->rates[SKILL_DISTANCE] = result->getDataInt("distance");
+		player->rates[SKILL_SHIELD] = result->getDataInt("shield");
+		player->rates[SKILL_FISHING] = result->getDataInt("fish");
+	}
+
+
 	player->updateBaseSpeed();
 	player->updateInventoryWeight();
 	player->updateItemsLight(true);
@@ -702,7 +718,6 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`skill_shielding_tries` = " << player->skills[SKILL_SHIELD][SKILLVALUE_TRIES] << ',';
 	query << "`skill_fishing` = " << player->skills[SKILL_FISHING][SKILLVALUE_LEVEL] << ',';
 	query << "`skill_fishing_tries` = " << player->skills[SKILL_FISHING][SKILLVALUE_TRIES] << ',';
-
 	query << "`max_summons` = " << player->maxSummons << ',';
 	
 
@@ -813,7 +828,6 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	query.str("");
-
 	stmt.setQuery("INSERT INTO `player_storage` (`player_id`, `key`, `value`) VALUES ");
 	player->genReservedStorageRange();
 
@@ -825,6 +839,30 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	if (!stmt.execute()) {
+		return false;
+	}
+
+	//save skill rates
+	query.str("");
+	query << "DELETE FROM `player_rates` WHERE `player_id` = " << player->getGUID();
+	if (!db->executeQuery(query.str())) {
+		return false;
+	}
+
+	query.str("");
+	query << "INSERT INTO `player_rates` (`player_id`, `level`, `magic_level`, `fist`, `club`, `sword`, `axe`, `distance`, `shield`, `fish`) VALUES (";
+	query << player->getGUID() << ",";
+	query << player->getRate(SKILL_LEVEL) << ",";
+	query << player->rates[SKILL_MAGLEVEL] << ",";
+	query << player->rates[SKILL_FIST] << ",";
+	query << player->rates[SKILL_CLUB] << ",";
+	query << player->rates[SKILL_SWORD] << ",";
+	query << player->rates[SKILL_AXE] << ",";
+	query << player->rates[SKILL_DISTANCE] << ",";
+	query << player->rates[SKILL_SHIELD] << ",";
+	query << player->rates[SKILL_FISHING] << ")";
+	
+	if (!db->executeQuery(query.str())) {
 		return false;
 	}
 

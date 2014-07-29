@@ -225,23 +225,18 @@ class LuaScriptInterface
 		int32_t getMetaEvent(const std::string& globalName, const std::string& eventName);
 
 		static ScriptEnvironment* getScriptEnv() {
-			assert(m_scriptEnvIndex >= 0 && m_scriptEnvIndex < 17);
+			assert(m_scriptEnvIndex >= 0 && m_scriptEnvIndex < 16);
 			return &m_scriptEnv[m_scriptEnvIndex];
 		}
 
 		static bool reserveScriptEnv() {
-			if (++m_scriptEnvIndex < 16) {
-				return true;
-			} else {
-				--m_scriptEnvIndex;
-				return false;
-			}
+			return ++m_scriptEnvIndex < 16;
 		}
 
 		static void resetScriptEnv() {
 			if (m_scriptEnvIndex >= 0) {
-				m_scriptEnv[m_scriptEnvIndex].resetEnv();
-				--m_scriptEnvIndex;
+				assert(m_scriptEnvIndex >= 0);
+				m_scriptEnv[m_scriptEnvIndex--].resetEnv();
 			}
 		}
 

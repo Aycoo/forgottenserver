@@ -318,15 +318,15 @@ CREATE TABLE IF NOT EXISTS `player_storage` (
 
 CREATE TABLE IF NOT EXISTS `player_rates` (
   `player_id` int(11) NOT NULL,
-  `level` int(11) NOT NULL DEFAULT '0',
-  `magic_level` int(11) NOT NULL DEFAULT '0',
-  `fist` int(11) NOT NULL DEFAULT '0',
-  `club` int(11) NOT NULL DEFAULT '0',
-  `sword` int(11) NOT NULL DEFAULT '0',
-  `axe` int(11) NOT NULL DEFAULT '0',
-  `distance` int(11) NOT NULL DEFAULT '0',
-  `shield` int(11) NOT NULL DEFAULT '0',
-  `fish` int(11) NOT NULL DEFAULT '0',
+  `level` DOUBLE(6,1) NOT NULL DEFAULT '0.0',
+  `magic_level` DOUBLE(6,1) NOT NULL DEFAULT '0',
+  `fist` DOUBLE(6,1) NOT NULL DEFAULT '0',
+  `club` DOUBLE(6,1) NOT NULL DEFAULT '0',
+  `sword` DOUBLE(6,1) NOT NULL DEFAULT '0',
+  `axe` DOUBLE(6,1) NOT NULL DEFAULT '0',
+  `distance` DOUBLE(6,1) NOT NULL DEFAULT '0',
+  `shield` DOUBLE(6,1) NOT NULL DEFAULT '0',
+  `fish` DOUBLE(6,1) NOT NULL DEFAULT '0',
   UNIQUE KEY `player_id` (`player_id`),
   FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
@@ -337,7 +337,7 @@ CREATE TABLE IF NOT EXISTS `server_config` (
   PRIMARY KEY `config` (`config`)
 ) ENGINE=InnoDB;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '19'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '20'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 CREATE TABLE IF NOT EXISTS `tile_store` (
   `house_id` int(11) NOT NULL,
