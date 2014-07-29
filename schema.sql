@@ -316,6 +316,21 @@ CREATE TABLE IF NOT EXISTS `player_storage` (
   FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS `player_rates` (
+  `player_id` int(11) NOT NULL,
+  `level` int(11) NOT NULL DEFAULT '0',
+  `magic_level` int(11) NOT NULL DEFAULT '0',
+  `fist` int(11) NOT NULL DEFAULT '0',
+  `club` int(11) NOT NULL DEFAULT '0',
+  `sword` int(11) NOT NULL DEFAULT '0',
+  `axe` int(11) NOT NULL DEFAULT '0',
+  `distance` int(11) NOT NULL DEFAULT '0',
+  `shield` int(11) NOT NULL DEFAULT '0',
+  `fish` int(11) NOT NULL DEFAULT '0',
+  UNIQUE KEY `player_id` (`player_id`),
+  FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS `server_config` (
   `config` varchar(50) NOT NULL,
   `value` varchar(256) NOT NULL DEFAULT '',

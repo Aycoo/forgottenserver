@@ -1343,9 +1343,9 @@ class Player : public Creature, public Cylinder
 		bool addAttackSkillPoint;
 		bool inventoryAbilities[CONST_SLOT_LAST + 1];
 
-		static uint32_t playerAutoID;
-
 		double rates[SKILL_LEVEL + 1];
+
+		static uint32_t playerAutoID;
 
 		void updateItemsLight(bool internal = false);
 		virtual int32_t getStepSpeed() const {

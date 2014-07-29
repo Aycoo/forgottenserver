@@ -152,7 +152,7 @@ Player::Player(ProtocolGame* p) :
 	}
 
 	for (int32_t i = SKILL_FIRST; i <= SKILL_LEVEL; ++i) {
-		rates[i] = 1.0f;
+		rates[i] = 0.0f;
 	}
 
 	maxDepotItems = 1000;
@@ -1803,15 +1803,13 @@ void Player::addExperience(Creature* target, uint64_t exp, bool sendText/* = fal
 	uint64_t currLevelExp = Player::getExpForLevel(level);
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
 	uint64_t rawExp = exp;
-	exp *= g_game.getExperienceStage(level);
+	exp *=  (rates[SKILL_LEVEL] == 0.0f ? g_game.getExperienceStage(level) : rates[SKILL_LEVEL]);
 	if (currLevelExp >= nextLevelExp) {
 		//player has reached max level
 		levelPercent = 0;
 		sendStats();
 		return;
 	}
-
-	exp *= rates[SKILL_LEVEL];
 
 	if (applyStaminaChange && g_config.getBoolean(ConfigManager::STAMINA_SYSTEM)) {
 		if (staminaMinutes > 2400) {
@@ -1994,7 +1992,7 @@ void Player::onBlockHit()
 		--shieldBlockCount;
 
 		if (hasShield()) {
-			addSkillAdvance(SKILL_SHIELD, rates[ SKILL_SHIELD ]);
+			addSkillAdvance(SKILL_SHIELD, (rates[SKILL_SHIELD] == 0.0f ? g_config.getNumber(ConfigManager::RATE_SKILL) : rates[SKILL_SHIELD]));
 		}
 	}
 }

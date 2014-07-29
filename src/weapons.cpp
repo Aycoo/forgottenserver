@@ -394,7 +394,7 @@ bool Weapon::useFist(Player* player, Creature* target)
 
 	Combat::doCombatHealth(player, target, damage, params);
 	if (!player->hasFlag(PlayerFlag_NotGainSkill) && player->getAddAttackSkill()) {
-		player->addSkillAdvance(SKILL_FIST, player->getRate( SKILL_FIRST ));
+		player->addSkillAdvance(SKILL_FIST, (player->getRate(SKILL_FIRST) == 0.0f ? g_config.getNumber(ConfigManager::RATE_SKILL) : player->getRate(SKILL_FIRST)));
 	}
 
 	return true;
@@ -445,13 +445,13 @@ void Weapon::onUsedWeapon(Player* player, Item* item) const
 		skills_t skillType;
 		uint32_t skillPoint;
 		if (getSkillType(player, item, skillType, skillPoint)) {
-			player->addSkillAdvance(skillType, skillPoint * player->getRate( skillType ) );
+			player->addSkillAdvance(skillType, skillPoint * (player->getRate(skillType) == 0.0f ? g_config.getNumber(ConfigManager::RATE_SKILL) : player->getRate(skillType)));
 		}
 	}
 
 	uint32_t manaCost = getManaCost(player);
 	if (manaCost != 0) {
-		player->addManaSpent( manaCost * player->getRate( SKILL_MAGLEVEL ) );
+		player->addManaSpent(manaCost * (player->getRate(SKILL_MAGLEVEL) == 0.0f ? g_config.getNumber(ConfigManager::RATE_MAGIC) : player->getRate(SKILL_MAGLEVEL)));
 		player->changeMana(-(int32_t)manaCost);
 	}
 
