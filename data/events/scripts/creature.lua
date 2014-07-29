@@ -49,7 +49,7 @@ end
 
 
 -- Events start from here on!
-function Creature:onTarget(target)
+function Creature:onTarget(target, isAttacked)
 	if not register(self, Register.target) then
 		return true
 	end

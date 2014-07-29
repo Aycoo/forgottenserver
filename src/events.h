@@ -53,7 +53,7 @@ class Events
 		bool eventPlayerOnLoseExperience(Player* player, uint64_t &exp);
 
 		// Creature
-		bool eventCreatureOnTarget(Creature* creature, Creature* target);
+		bool eventCreatureOnTarget(Creature* creature, Creature* target, bool isAttacked);
 		bool eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& newOutfit, const Outfit_t& oldOutfit);
 		bool eventCreatureOnAttack(Creature* creature, Creature* target);
 		void eventCreatureOnHear(Creature* creature, Creature* sayCreature, const std::string words, enum SpeakClasses type, Position pos);

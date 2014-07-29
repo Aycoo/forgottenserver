@@ -534,7 +534,7 @@ bool Events::eventPlayerOnGainExperience(Player* player, Creature* target, uint6
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(L, 0));
 	}
 	else {
-		exp = LuaScriptInterface::getNumber<uint64_t>(L, 0);
+		exp = LuaScriptInterface::getNumber<uint64_t>(L, -1);
 	}
 	lua_pop(L, 1);
 	scriptInterface.resetScriptEnv();
@@ -575,9 +575,10 @@ bool Events::eventPlayerOnLoseExperience(Player* player, uint64_t &exp)
 	return exp != 0;
 }
 
-bool Events::eventCreatureOnTarget(Creature* creature, Creature* target)
+bool Events::eventCreatureOnTarget(Creature* creature, Creature* target, bool isAttacked)
 {
-	// Creature:onTarget(target)
+	// Creature:onTarget(target, isAttacked)
+	// isAttacked, tells you as a bool if the monster has been attacked by someone or not.
 	if (creatureOnTarget == -1) {
 		return true;
 	}
@@ -599,7 +600,9 @@ bool Events::eventCreatureOnTarget(Creature* creature, Creature* target)
 	LuaScriptInterface::pushUserdata<Creature>(L, target);
 	LuaScriptInterface::setCreatureMetatable(L, -1, target);
 
-	return scriptInterface.callFunction(2);
+	lua_pushboolean(L, isAttacked);
+
+	return scriptInterface.callFunction(3);
 }
 
 bool Events::eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& newOutfit, const Outfit_t& oldOutfit)

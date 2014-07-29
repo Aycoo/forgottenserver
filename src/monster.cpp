@@ -26,10 +26,12 @@
 #include "combat.h"
 #include "spawn.h"
 #include "tasks.h"
+#include "events.h"
 
 extern Game g_game;
 extern Monsters g_monsters;
 extern CreatureEvents* g_creatureEvents;
+extern Events* g_events;
 
 int32_t Monster::despawnRange;
 int32_t Monster::despawnRadius;
@@ -635,6 +637,10 @@ bool Monster::selectTarget(Creature* creature)
 {
 	if (!isTarget(creature)) {
 		return false;
+	}
+
+	if (!g_events->eventCreatureOnTarget(this, creature, hasBeenAttacked(creature->getID()))) {
+			return false;
 	}
 
 	auto it = std::find(targetList.begin(), targetList.end(), creature);
