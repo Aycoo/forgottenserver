@@ -898,9 +898,11 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 bool Creature::setAttackedCreature(Creature* creature)
 {
 	if (this && creature) {
-		if (!g_events->eventCreatureOnTarget(this, creature, hasBeenAttacked(creature->getID()))) {
-			attackedCreature = nullptr;
-			return false;
+		if (this->getPlayer()) {
+			if (!g_events->eventCreatureOnTarget(this->getPlayer(), creature, hasBeenAttacked(creature->getID()))) {
+				attackedCreature = nullptr;
+				return false;
+			}
 		}
 	}
 	if (creature) {

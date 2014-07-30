@@ -58,6 +58,9 @@ void Events::clear()
 	creatureOnChangeOutfit = -1;
 	creatureOnAttack = -1;
 	creatureOnHear = -1;
+
+	//Monster
+	monsterOnTargetDeny = -1;
 }
 
 bool Events::load()
@@ -126,18 +129,19 @@ bool Events::load()
 			else if (className == "Creature") {
 				if (methodName == "onTarget") {
 					creatureOnTarget = event;
-				}
-				else if (methodName == "onChangeOutfit") {
+				} else if (methodName == "onChangeOutfit") {
 					creatureOnChangeOutfit = event;
-				}
-				else if (methodName == "onAttack") {
+				} else if (methodName == "onAttack") {
 					creatureOnAttack = event;
-				}
-				else if (methodName == "onHear") {
+				} else if (methodName == "onHear") {
 					creatureOnHear = event;
-				}
-				else {
+				} else {
 					std::cout << "[Warning - Events::load] Unknown creature method: " << methodName << std::endl;
+				}
+			}
+			else if (className == "Monster") {
+				 if (methodName == "onTargetDeny") {
+					monsterOnTargetDeny = event;
 				}
 			} else {
 				std::cout << "[Warning - Events::load] Unknown class: " << className << std::endl;
@@ -577,8 +581,8 @@ bool Events::eventPlayerOnLoseExperience(Player* player, uint64_t &exp)
 
 bool Events::eventCreatureOnTarget(Creature* creature, Creature* target, bool isAttacked)
 {
-	// Creature:onTarget(target, isAttacked)
-	// isAttacked, tells you as a bool if the monster has been attacked by someone or not.
+	// Creature:onTarget(target, isAttacked) or Creature.onTarget(self, target, isAttacked)
+	// isAttacked, tells you as a bool if the creature has been attacked by target or not.
 	if (creatureOnTarget == -1) {
 		return true;
 	}
@@ -605,7 +609,7 @@ bool Events::eventCreatureOnTarget(Creature* creature, Creature* target, bool is
 	return scriptInterface.callFunction(3);
 }
 
-bool Events::eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& newOutfit, const Outfit_t& oldOutfit)
+bool Events::eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t newOutfit, const Outfit_t oldOutfit)
 {
 	// Creature:onChangeOutfit(newOutfit, oldOutfit)
 	if (creatureOnChangeOutfit == -1) {
@@ -688,4 +692,32 @@ void Events::eventCreatureOnHear(Creature* creature, Creature* sayCreature, cons
 	LuaScriptInterface::pushPosition(L, pos);
 
 	scriptInterface.callVoidFunction(5);
+}
+
+void Events::eventMonsterOnTargetDeny(Creature* creature, Creature* target)
+{
+	// Monster:onTargetDeny(target) or Monster.onTargetDeny(self, target)
+	// this is called when Creature:onTarget(..) returns false (only if the one targeting is a monster).
+	if (monsterOnTargetDeny == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventMonsterOnTargetDeny] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(monsterOnTargetDeny, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(monsterOnTargetDeny);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, target);
+	LuaScriptInterface::setCreatureMetatable(L, -1, target);
+
+	scriptInterface.callVoidFunction(2);
 }

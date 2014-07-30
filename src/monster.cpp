@@ -640,7 +640,8 @@ bool Monster::selectTarget(Creature* creature)
 	}
 
 	if (!g_events->eventCreatureOnTarget(this, creature, hasBeenAttacked(creature->getID()))) {
-			return false;
+		g_events->eventMonsterOnTargetDeny(this, creature);
+		return false;
 	}
 
 	auto it = std::find(targetList.begin(), targetList.end(), creature);

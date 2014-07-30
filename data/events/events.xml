@@ -23,4 +23,7 @@
 	<event class="Creature" method="onChangeOutfit" enabled="0"/>
 	<event class="Creature" method="onAttack" enabled="0"/>
 	<event class="Creature" method="onHear" enabled="0"/>
+	
+	<!-- Monster methods -->
+	<event class="Monster" method="onTargetDeny" enabled ="0"/>
 </events>
