@@ -796,7 +796,6 @@ void Monster::doAttacking(uint32_t interval)
 
 	for (const spellBlock_t& spellBlock : mType->spellAttackList) {
 		bool inRange = false;
-
 		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange)) {
 			if (spellBlock.chance >= (uint32_t)uniform_random(1, 100)) {
 				if (updateLook) {
