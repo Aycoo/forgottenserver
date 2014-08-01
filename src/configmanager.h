@@ -46,6 +46,7 @@ class ConfigManager
 			STAMINA_SYSTEM = 14,
 			WARN_UNSAFE_SCRIPTS = 15,
 			CONVERT_UNSAFE_SCRIPTS = 16,
+			STAMINA_BONUS_PREMIUM = 17,
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
 
@@ -103,6 +104,8 @@ class ConfigManager
 			MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER = 28,
 			EXP_FROM_PLAYERS_LEVEL_RANGE = 29,
 			MAX_PACKETS_PER_SECOND = 30,
+			RATE_STAMINA_ABOVE = 31,
+			RATE_STAMINA_UNDER = 32,
 			LAST_NUMBER_CONFIG /* this must be the last one */
 		};
 

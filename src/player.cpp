@@ -1816,11 +1816,11 @@ void Player::addExperience(Creature* target, uint64_t exp, bool sendText/* = fal
 
 	if (applyStaminaChange && g_config.getBoolean(ConfigManager::STAMINA_SYSTEM)) {
 		if (staminaMinutes > 2400) {
-			if (isPremium()) {
-				exp *= 1.5;
+			if (isPremium() && !g_config.getBoolean(ConfigManager::STAMINA_BONUS_PREMIUM)) {
+				exp *= g_config.getNumber(ConfigManager::RATE_STAMINA_ABOVE);
 			}
 		} else if (staminaMinutes <= 840) {
-			exp *= 0.5;
+			exp *= g_config.getNumber(ConfigManager::RATE_STAMINA_UNDER);
 		}
 	}
 

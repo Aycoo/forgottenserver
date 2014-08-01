@@ -94,6 +94,7 @@ bool ConfigManager::load()
 	m_confBoolean[STAMINA_SYSTEM] = booleanString(getGlobalString(L, "staminaSystem", "yes"));
 	m_confBoolean[WARN_UNSAFE_SCRIPTS] = booleanString(getGlobalString(L, "warnUnsafeScripts", "no"));
 	m_confBoolean[CONVERT_UNSAFE_SCRIPTS] = booleanString(getGlobalString(L, "convertUnsafeScripts", "no"));
+	m_confBoolean[STAMINA_BONUS_PREMIUM] = booleanString(getGlobalString(L, "staminaThresholdOnlyPremium", "yes"));
 
 	m_confString[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	m_confString[SERVER_NAME] = getGlobalString(L, "serverName");
@@ -108,10 +109,10 @@ bool ConfigManager::load()
 	m_confNumber[PZ_LOCKED] = getGlobalNumber(L, "pzLocked", 60000);
 	m_confNumber[DEFAULT_DESPAWNRANGE] = getGlobalNumber(L, "deSpawnRange", 2);
 	m_confNumber[DEFAULT_DESPAWNRADIUS] = getGlobalNumber(L, "deSpawnRadius", 50);
-	m_confNumber[RATE_EXPERIENCE] = getGlobalNumber(L, "rateExp", 5);
-	m_confNumber[RATE_SKILL] = getGlobalNumber(L, "rateSkill", 3);
-	m_confNumber[RATE_LOOT] = getGlobalNumber(L, "rateLoot", 2);
-	m_confNumber[RATE_MAGIC] = getGlobalNumber(L, "rateMagic", 3);
+	m_confNumber[RATE_EXPERIENCE] = getGlobalNumber(L, "rateExp", 5.0f);
+	m_confNumber[RATE_SKILL] = getGlobalNumber(L, "rateSkill", 3.0f);
+	m_confNumber[RATE_LOOT] = getGlobalNumber(L, "rateLoot", 2.0f);
+	m_confNumber[RATE_MAGIC] = getGlobalNumber(L, "rateMagic", 3.0f);
 	m_confNumber[RATE_SPAWN] = getGlobalNumber(L, "rateSpawn", 1);
 	m_confNumber[HOUSE_PRICE] = getGlobalNumber(L, "housePriceEachSQM", 1000);
 	m_confNumber[KILLS_TO_RED] = getGlobalNumber(L, "killsToRedSkull", 3);
@@ -130,6 +131,8 @@ bool ConfigManager::load()
 	m_confNumber[CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES] = getGlobalNumber(L, "checkExpiredMarketOffersEachMinutes", 60);
 	m_confNumber[MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER] = getGlobalNumber(L, "maxMarketOffersAtATimePerPlayer", 100);
 	m_confNumber[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 25);
+	m_confNumber[RATE_STAMINA_ABOVE] = getGlobalNumber(L, "rateStaminaAboveNormal", 1.5f);
+	m_confNumber[RATE_STAMINA_UNDER] = getGlobalNumber(L, "rateStaminaUnderNormal", 0.5f);
 
 	m_isLoaded = true;
 	lua_close(L);

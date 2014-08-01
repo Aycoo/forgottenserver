@@ -15,6 +15,11 @@ experienceByKillingPlayers = "no"
 expFromPlayersLevelRange = 75
 noDamageToSameLookfeet = "no"
 
+-- addEvent issue tracking, tells you if there is something wrong.
+-- It can also convert wrong formated addEvents.
+warnUnsafeScripts = "no"
+convertUnsafeScripts = "no"
+
 -- Connection Config
 -- NOTE: maxPlayers set to 0 means no limit
 ip = "127.0.0.1"
@@ -70,15 +75,15 @@ allowChangeOutfit = "yes"
 freePremium = "no"
 kickIdlePlayerAfterMinutes = 15
 maxMessageBuffer = 4
-emoteSpells = "no"
+emoteSpells = "yes"
 
 -- Rates
 -- NOTE: rateExp is not used if you have enabled stages in data/XML/stages.xml
-rateExp = 5
-rateSkill = 3
-rateLoot = 2
-rateMagic = 3
-rateSpawn = 1
+rateExp = 5.0
+rateSkill = 3.0
+rateLoot = 2.0
+rateMagic = 3.0
+rateSpawn = 1.0
 
 -- Monsters
 deSpawnRange = 2
@@ -86,6 +91,9 @@ deSpawnRadius = 50
 
 -- Stamina
 staminaSystem = "yes"
+rateStaminaAboveNormal = 1.5
+rateStaminaUnderNormal = 1.0
+staminaThresholdOnlyPremium = "yes"
 
 -- Startup
 -- NOTE: defaultPriority only works on Windows and sets process priority.
