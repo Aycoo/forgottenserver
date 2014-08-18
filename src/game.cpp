@@ -4014,15 +4014,17 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		if (realHealthChange > 0 && !target->isInGhostMode()) {
 			std::string damageString = std::to_string(realHealthChange);
 			std::string pluralString = (realHealthChange != 1 ? "s." : ".");
-			std::string spectatorMessage = ucfirst(target->getNameDescription());
+			std::string spectatorMessage;
 			if (!attacker) {
+				spectatorMessage += ucfirst(target->getNameDescription());
 				spectatorMessage += " was healed for " + damageString + " hitpoint" + pluralString;
 			} else {
+				spectatorMessage += ucfirst(attacker->getNameDescription());
 				spectatorMessage += " healed ";
 				if (attacker == target) {
 					spectatorMessage += (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "herself" : "himself") : "itself");
 				} else {
-					spectatorMessage += target->getNameDescription();
+					spectatorMessage += attacker->getNameDescription();
 				}
 				spectatorMessage += " for " + damageString + " hitpoint" + pluralString;
 			}
