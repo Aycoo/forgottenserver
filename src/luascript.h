@@ -257,7 +257,7 @@ class LuaScriptInterface
 		bool pushFunction(int32_t functionId);
 
 		static int32_t luaErrorHandler(lua_State* L);
-		bool callFunction(int32_t params);
+		bool callFunction(int32_t params, int32_t results = 1, bool resetEnv = true);
 		void callVoidFunction(int32_t params);
 
 		//push/pop common structures
@@ -400,7 +400,7 @@ class LuaScriptInterface
 #ifndef LUAJIT_VERSION
 		static const luaL_Reg luaBitReg[7];
 #endif
-		static const luaL_Reg luaConfigManagerTable[4];
+		static const luaL_Reg luaConfigManagerTable[7];
 		static const luaL_Reg luaDatabaseTable[7];
 		static const luaL_Reg luaResultTable[7];
 
@@ -533,6 +533,10 @@ class LuaScriptInterface
 		static int32_t luaConfigManagerGetString(lua_State* L);
 		static int32_t luaConfigManagerGetNumber(lua_State* L);
 		static int32_t luaConfigManagerGetBoolean(lua_State* L);
+
+		static int32_t luaConfigManagerSetString(lua_State* L);
+		static int32_t luaConfigManagerSetNumber(lua_State* L);
+		static int32_t luaConfigManagerSetBoolean(lua_State* L);
 
 		static int32_t luaDatabaseExecute(lua_State* L);
 		static int32_t luaDatabaseStoreQuery(lua_State* L);
@@ -994,6 +998,13 @@ class LuaScriptInterface
 		static int32_t luaPlayerGetRate(lua_State* L);
 		static int32_t luaPlayerSetRate(lua_State* L);
 
+		static int32_t luaPlayerGetConfigString(lua_State* L);
+		static int32_t luaPlayerGetConfigNumber(lua_State* L);
+		static int32_t luaPlayerGetConfigBoolean(lua_State* L);
+
+		static int32_t luaPlayerSetConfigString(lua_State* L);
+		static int32_t luaPlayerSetConfigNumber(lua_State* L);
+		static int32_t luaPlayerSetConfigBoolean(lua_State* L);
 		// Monster
 		static int32_t luaMonsterCreate(lua_State* L);
 

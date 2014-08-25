@@ -52,8 +52,8 @@ class MissionState
 class Mission
 {
 	public:
-		Mission(const std::string& name, int32_t storageID, int32_t startValue, int32_t endValue, bool ignoreEndValue)
-			: name(name), storageID(storageID), startValue(startValue), endValue(endValue), ignoreEndValue(ignoreEndValue) {
+		Mission(const std::string& name, int32_t storageID, int32_t startValue, int32_t endValue, bool ignoreEndValue, bool custom )
+			: name(name), storageID(storageID), startValue(startValue), endValue(endValue), ignoreEndValue(ignoreEndValue), custom( custom ) {
 			mainState = nullptr;
 		}
 
@@ -80,6 +80,9 @@ class Mission
 		uint32_t storageID;
 		int32_t startValue, endValue;
 		bool ignoreEndValue;
+		bool custom;
+
+		bool internalGetDescription(Player* player, std::string& description ) const;
 };
 
 class Quest

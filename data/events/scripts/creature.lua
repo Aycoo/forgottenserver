@@ -94,3 +94,7 @@ function Creature:onHear(sayCreature, words, type, pos)
 	-- doesn't need a return value.
 	-- start scripting from here on.
 end
+
+function Creature:onMove( fromPosition, toPosition )
+	return true
+end

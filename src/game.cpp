@@ -978,8 +978,15 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 	Cylinder* fromTile = creature->getTile();
 	Cylinder* toTile = nullptr;
 
-	creature->setLastPosition(creature->getPosition());
 	const Position& currentPos = creature->getPosition();
+
+	if (!g_events->eventCreatureOnMove(creature, currentPos, getNextPosition(direction, currentPos)))
+	{
+		return RET_NOTPOSSIBLE;
+	}
+
+	creature->setLastPosition(creature->getPosition());
+	
 	Position destPos = currentPos;
 	bool diagonalMovement;
 
@@ -3301,14 +3308,15 @@ void Game::playerTurn(uint32_t playerId, Direction dir)
 
 void Game::playerRequestOutfit(uint32_t playerId)
 {
-	if (!g_config.getBoolean(ConfigManager::ALLOW_CHANGEOUTFIT)) {
-		return;
-	}
-
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
 		return;
 	}
+
+	if (!player->getConfigBoolean(PLAYER_ALLOW_CHANGEOUTFIT)) {
+		return;
+	}
+
 
 	player->sendOutfitWindow();
 }
@@ -3325,12 +3333,12 @@ void Game::playerToggleMount(uint32_t playerId, bool mount)
 
 void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 {
-	if (!g_config.getBoolean(ConfigManager::ALLOW_CHANGEOUTFIT)) {
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
 		return;
 	}
 
-	Player* player = getPlayerByID(playerId);
-	if (!player) {
+	if (!player->getConfigBoolean(PLAYER_ALLOW_CHANGEOUTFIT)) {
 		return;
 	}
 
