@@ -95,6 +95,6 @@ function Creature:onHear(sayCreature, words, type, pos)
 	-- start scripting from here on.
 end
 
-function Creature:onMove( fromPosition, toPosition )
+function Creature:onMove(fromPosition, toPosition)
 	return true
 end

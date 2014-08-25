@@ -980,11 +980,6 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 
 	const Position& currentPos = creature->getPosition();
 
-	if (!g_events->eventCreatureOnMove(creature, currentPos, getNextPosition(direction, currentPos)))
-	{
-		return RET_NOTPOSSIBLE;
-	}
-
 	creature->setLastPosition(creature->getPosition());
 	
 	Position destPos = currentPos;
@@ -1030,6 +1025,13 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 				}
 			}
 		}
+	}
+
+	if (!g_events->eventCreatureOnMove(creature, currentPos, destPos))
+	{
+		creature->stopEventWalk();
+		creature->onWalkAborted();
+		return RET_NOTPOSSIBLE;
 	}
 
 	toTile = getTile(destPos);

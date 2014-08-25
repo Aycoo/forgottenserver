@@ -2214,6 +2214,7 @@ void Player::death(Creature* _lastHitCreature)
 
 		//Level loss
 		uint64_t expLoss = (uint64_t)(experience * deathLossPercent);
+		g_events->eventPlayerOnLoseExperience(this, expLoss);
 		if (expLoss != 0) {
 			uint32_t oldLevel = level;
 
