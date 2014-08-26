@@ -602,22 +602,24 @@ int32_t LuaScriptInterface::luaErrorHandler(lua_State* L)
 	return 1;
 }
 
-bool LuaScriptInterface::callFunction(int32_t params)
+bool LuaScriptInterface::callFunction(int32_t params, int32_t results, bool resetEnv)
 {
 	bool result = false;
-	int32_t size = lua_gettop(m_luaState);
-	if (protectedCall(m_luaState, params, 1) != 0) {
+	
+	//int32_t size = lua_gettop(m_luaState);
+
+	if (protectedCall(m_luaState, params, results) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(m_luaState, -1));
 	} else {
-		result = LuaScriptInterface::getBoolean(m_luaState, -1);
+		result = LuaScriptInterface::getBoolean(m_luaState, -results);
 	}
 
-	lua_pop(m_luaState, 1);
-	if ((lua_gettop(m_luaState) + params + 1) != size) {
-		LuaScriptInterface::reportError(nullptr, "Stack size changed!");
+	if (resetEnv)
+	{
+		lua_pop(m_luaState, results);
+		resetScriptEnv();
 	}
 
-	resetScriptEnv();
 	return result;
 }
 
@@ -1794,6 +1796,15 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::EXP_FROM_PLAYERS_LEVEL_RANGE)
 	registerEnumIn("configKeys", ConfigManager::MAX_PACKETS_PER_SECOND)
 
+	// playerConfigKeys, used in player:setConfigBoolean, setConfigNumber and setConfigString
+	registerTable("playerConfigKeys");
+	registerEnumIn("playerConfigKeys", PLAYER_ALLOW_CHANGEOUTFIT);
+	registerEnumIn("playerConfigKeys", PLAYER_REMOVE_AMMO);
+	registerEnumIn("playerConfigKeys", PLAYER_REMOVE_RUNE_CHARGES);
+
+	registerEnumIn("playerConfigKeys", PLAYER_ACTIONS_DELAY_INTERVAL);
+	registerEnumIn("playerConfigKeys", PLAYER_EX_ACTIONS_DELAY_INTERVAL);
+
 	// table
 	registerMethod("table", "create", LuaScriptInterface::luaTableCreate);
 
@@ -2242,6 +2253,15 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "setRate", LuaScriptInterface::luaPlayerSetRate);
 	registerMethod("Player", "getRate", LuaScriptInterface::luaPlayerGetRate);
+
+	registerMethod("Player", "getConfigString", LuaScriptInterface::luaPlayerGetConfigString);
+	registerMethod("Player", "getConfigNUmber", LuaScriptInterface::luaPlayerGetConfigNumber);
+	registerMethod("Player", "getConfigBoolean", LuaScriptInterface::luaPlayerGetConfigBoolean);
+	registerMethod("Player", "setConfigString", LuaScriptInterface::luaPlayerSetConfigString);
+	registerMethod("Player", "setConfigNumber", LuaScriptInterface::luaPlayerSetConfigNumber);
+	registerMethod("Player", "setConfigBoolean", LuaScriptInterface::luaPlayerSetConfigBoolean);
+
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -4494,6 +4514,9 @@ const luaL_Reg LuaScriptInterface::luaConfigManagerTable[] = {
 	{"getString", LuaScriptInterface::luaConfigManagerGetString},
 	{"getNumber", LuaScriptInterface::luaConfigManagerGetNumber},
 	{"getBoolean", LuaScriptInterface::luaConfigManagerGetBoolean},
+	{ "setString", LuaScriptInterface::luaConfigManagerSetString},
+	{ "setNumber", LuaScriptInterface::luaConfigManagerSetNumber},
+	{ "setBoolean", LuaScriptInterface::luaConfigManagerSetBoolean},
 	{nullptr, nullptr}
 };
 
@@ -4514,6 +4537,25 @@ int32_t LuaScriptInterface::luaConfigManagerGetBoolean(lua_State* L)
 	pushBoolean(L, g_config.getBoolean(getNumber<ConfigManager::boolean_config_t>(L, -1)));
 	return 1;
 }
+
+int32_t LuaScriptInterface::luaConfigManagerSetString(lua_State* L)
+{
+	pushBoolean(L, g_config.setString(getNumber<ConfigManager::string_config_t>(L, 1), getString(L, 2)));
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaConfigManagerSetNumber(lua_State* L)
+{
+	pushBoolean(L, g_config.setNumber(getNumber<ConfigManager::number_config_t>(L, 1),getNumber<double>(L, 2)));
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaConfigManagerSetBoolean(lua_State* L)
+{
+	pushBoolean(L, g_config.setBoolean(getNumber<ConfigManager::boolean_config_t>(L, 1), getBoolean(L, 2)));
+	return 1;
+}
+
 
 const luaL_Reg LuaScriptInterface::luaDatabaseTable[] = {
 	{"query", LuaScriptInterface::luaDatabaseExecute},
@@ -9767,7 +9809,7 @@ int32_t LuaScriptInterface::luaPlayerGetRate(lua_State* L)
 		lua_pushnumber(L, player->getRate((skills_t)skillType));
 	}
 	else {
-		lua_pushnil(L);
+		pushBoolean(L, false);
 	}
 
 	return 1;
@@ -9784,11 +9826,105 @@ int32_t LuaScriptInterface::luaPlayerSetRate(lua_State* L)
 		pushBoolean(L, true);
 	}
 	else {
-		lua_pushnil(L);
+		pushBoolean(L, false);
 	}
 
 	return 1;
 }
+
+int32_t LuaScriptInterface::luaPlayerGetConfigString(lua_State* L)
+{
+	// player:getConfigString( what )
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushString(L, player->getConfigString((player_string_config_t)(getNumber<int32_t>(L, 2))));
+	}
+	else {
+		pushBoolean(L, false);
+	}
+
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetConfigNumber(lua_State* L)
+{
+	// player:getConfigNumber( what )
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getConfigNumber((player_number_config_t)(getNumber<int32_t>(L, 2))));
+	}
+	else {
+		pushBoolean(L, false);
+	}
+
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerGetConfigBoolean(lua_State* L)
+{
+	// player:getConfigBoolean( what )
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->getConfigBoolean((player_boolean_config_t)(getNumber<int32_t>(L, 2))));
+	}
+	else {
+		pushBoolean(L, false);
+	}
+
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSetConfigString(lua_State* L)
+{
+	// player:setConfigString( what, value )
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+
+		player->setConfigString((player_string_config_t)(getNumber<int32_t>(L, 2)), getString(L, 3));
+
+		pushBoolean(L, true);
+	}
+	else {
+		pushBoolean(L, false);
+	}
+
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSetConfigNumber(lua_State* L)
+{
+	// player:setConfigNumber( what, value )
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+
+		player->setConfigNumber((player_number_config_t)(getNumber<int32_t>(L, 2)), getNumber<double>(L, 3));
+
+		pushBoolean(L, true);
+	}
+	else {
+		pushBoolean(L, false);
+	}
+
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaPlayerSetConfigBoolean(lua_State* L)
+{
+	// player:setConfigBoolean( what, value )
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		
+		player->setConfigBoolean((player_boolean_config_t)(getNumber<int32_t>(L, 2)), getBoolean(L, 3));
+
+		pushBoolean(L, true);
+	}
+	else {
+		pushBoolean(L, false);
+	}
+
+	return 1;
+}
+
 
 // Monster
 int32_t LuaScriptInterface::luaMonsterCreate(lua_State* L)

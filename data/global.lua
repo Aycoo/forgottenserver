@@ -1,5 +1,6 @@
 dofile('data/compat.lua')
 dofile('data/management.lua')
+dofile('data/lib/LoadLibs.lua' )
 
 TRUE = true
 FALSE = false

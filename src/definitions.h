@@ -22,7 +22,7 @@
 
 #define STATUS_SERVER_NAME "The Forgotten Server Custom Edition"
 #define STATUS_SERVER_VERSION "1.0"
-#define STATUS_SERVER_DEVELOPERS "Mark Samman & Evil Hero"
+#define STATUS_SERVER_DEVELOPERS "Mark Samman, Kornholijo, Dalkon, Evil Hero, HeavenIsLost( Yamaken ) and All OpenTibia Team!"
 
 #define CLIENT_VERSION_MIN 1041
 #define CLIENT_VERSION_MAX 1041

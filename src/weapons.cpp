@@ -417,7 +417,7 @@ bool Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int
 		Combat::doCombatHealth(player, target, damage, params);
 	}
 
-	onUsedAmmo(item, target->getTile());
+	onUsedAmmo(player, item, target->getTile());
 	onUsedWeapon(player, item);
 	return true;
 }
@@ -434,7 +434,7 @@ bool Weapon::internalUseWeapon(Player* player, Item* item, Tile* tile) const
 		g_game.addMagicEffect(tile->getPosition(), CONST_ME_POFF);
 	}
 
-	onUsedAmmo(item, tile);
+	onUsedAmmo(player, item, tile);
 	onUsedWeapon(player, item);
 	return true;
 }
@@ -460,9 +460,9 @@ void Weapon::onUsedWeapon(Player* player, Item* item) const
 	}
 }
 
-void Weapon::onUsedAmmo(Item* item, Tile* destTile) const
+void Weapon::onUsedAmmo(Player* player, Item* item, Tile* destTile) const
 {
-	if (!g_config.getBoolean(ConfigManager::REMOVE_AMMO)) {
+	if (!player->getConfigBoolean(PLAYER_REMOVE_AMMO)) {
 		return;
 	}
 
@@ -867,7 +867,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 	return true;
 }
 
-void WeaponDistance::onUsedAmmo(Item* item, Tile* destTile) const
+void WeaponDistance::onUsedAmmo(Player* player, Item* item, Tile* destTile) const
 {
 	if (ammoAction == AMMOACTION_MOVEBACK && breakChance > 0 && uniform_random(1, 100) <= breakChance) {
 		uint16_t newCount = item->getItemCount();
@@ -877,7 +877,7 @@ void WeaponDistance::onUsedAmmo(Item* item, Tile* destTile) const
 
 		g_game.transformItem(item, item->getID(), newCount);
 	} else {
-		Weapon::onUsedAmmo(item, destTile);
+		Weapon::onUsedAmmo(player, item, destTile);
 	}
 }
 

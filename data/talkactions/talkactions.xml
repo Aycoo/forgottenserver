@@ -9,6 +9,7 @@
 	<talkaction words="/i" separator=" " groupId="3" script="create_item.lua" />
 	<talkaction words="/s" separator=" " groupId="3" script="place_npc.lua" />
 	<talkaction words="/addskill" separator=" " groupId="3" script="add_skill.lua" />
+	<talkaction words="/storage" separator=" " groupId="3" script="storage.lua" />
 	
 	<!-- commands for GM -->
 	<talkaction words="/ban" separator=" " groupId="2" script="ban.lua" />

@@ -50,15 +50,20 @@ class Events
 		bool eventPlayerOnMoveCreature(Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition);
 		bool eventPlayerOnTurn(Player* player, Direction direction);
 		bool eventPlayerOnTradeRequest(Player* player, Player* target, Item* item);
-		bool eventPlayerOnGainExperience(Player* player, Creature* target, uint64_t &exp, uint64_t rawExp);
-		bool eventPlayerOnLoseExperience(Player* player, uint64_t &exp);
+
+		void eventPlayerOnGainExperience(Player* player, Creature* target, uint64_t &exp, uint64_t rawExp);
+		void eventPlayerOnLoseExperience(Player* player, uint64_t &exp);
+		bool eventPlayerGetCustomMissionDescription(Player* player, std::string& description);
+		bool eventPlayerOnSave(Player* player);
 
 		// Creature
 		bool eventCreatureOnTarget(Creature* creature, Creature* target, bool isAttacked);
-		bool eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t newOutfit, const Outfit_t oldOutfit);
-		bool eventCreatureOnAttack(Creature* creature, Creature* target);
-		void eventCreatureOnHear(Creature* creature, Creature* sayCreature, const std::string words, SpeakClasses type, Position pos);
 
+		bool eventCreatureOnChangeOutfit(Creature* creature, Outfit_t& outfit, const Outfit_t oldOutfit);
+		bool eventCreatureOnAttack(Creature* creature, Creature* target);
+		void eventCreatureOnHear(Creature* creature, Creature* sayCreature, const std::string words, enum SpeakClasses type, Position pos);
+		bool eventCreatureOnMove(Creature* creature, Position fromPos, Position toPos);
+		
 		// Monster
 		void eventMonsterOnTargetDeny(Creature* creature, Creature* target);
 
@@ -82,13 +87,16 @@ class Events
 		int32_t playerOnTradeRequest;
 		int32_t playerOnGainExperience;
 		int32_t playerOnLoseExperience;
+		int32_t playerGetCustomMissionDescription;
+		int32_t playerOnSave;
+
 
 		// Creature
 		int32_t creatureOnTarget;
 		int32_t creatureOnChangeOutfit;
 		int32_t creatureOnAttack;
 		int32_t creatureOnHear;
-
+		int32_t creatureOnMove;
 		// Monster
 		int32_t monsterOnTargetDeny;
 };

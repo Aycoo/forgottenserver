@@ -155,6 +155,16 @@ Player::Player(ProtocolGame* p) :
 		rates[i] = 0.0f;
 	}
 
+	m_confBoolean[PLAYER_ALLOW_CHANGEOUTFIT] = g_config.getBoolean(ConfigManager::ALLOW_CHANGEOUTFIT);
+	m_confBoolean[PLAYER_REMOVE_RUNE_CHARGES] = g_config.getBoolean(ConfigManager::REMOVE_RUNE_CHARGES);
+	m_confBoolean[PLAYER_REMOVE_AMMO] = g_config.getBoolean(ConfigManager::REMOVE_AMMO);
+
+	m_confNumber[PLAYER_ACTIONS_DELAY_INTERVAL] = g_config.getNumber(ConfigManager::EX_ACTIONS_DELAY_INTERVAL);
+	m_confNumber[PLAYER_EX_ACTIONS_DELAY_INTERVAL] = g_config.getNumber(ConfigManager::EX_ACTIONS_DELAY_INTERVAL);
+
+	m_confNumber[PLAYER_NO_SKULL]       = false;
+	m_confNumber[PLAYER_NO_SECURE_MODE] = false;
+
 	maxDepotItems = 1000;
 	maxVipEntries = 20;
 
@@ -1824,7 +1834,10 @@ void Player::addExperience(Creature* target, uint64_t exp, bool sendText/* = fal
 		}
 	}
 
-	if (!g_events->eventPlayerOnGainExperience(this, target, exp, rawExp)) {
+	g_events->eventPlayerOnGainExperience(this, target, exp, rawExp);
+
+	if (exp <= 0)
+	{
 		return;
 	}
 
@@ -1906,7 +1919,8 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		return;
 	}
 
-	if (!g_events->eventPlayerOnLoseExperience(this, exp)) {
+	g_events->eventPlayerOnLoseExperience(this, exp);
+	if (exp == 0) {
 		return;
 	}
 
@@ -2208,7 +2222,8 @@ void Player::death(Creature* _lastHitCreature)
 
 		//Level loss
 		uint64_t expLoss = (uint64_t)(experience * deathLossPercent);
-		if (g_events->eventPlayerOnLoseExperience(this, expLoss)) {
+		g_events->eventPlayerOnLoseExperience(this, expLoss);
+		if (expLoss != 0) {
 			uint32_t oldLevel = level;
 
 			if (vocation->getId() == VOCATION_NONE || level > 7) {
@@ -3652,6 +3667,12 @@ void Player::onAttackedCreature(Creature* target)
 			if (!pzLocked) {
 				pzLocked = true;
 				sendIcons();
+			}
+
+			if (this->getConfigBoolean(PLAYER_NO_SKULL) == true)
+			{
+				addInFightTicks();
+				return;
 			}
 
 			if (!Combat::isInPvpZone(this, targetPlayer) && !isInWar(targetPlayer)) {

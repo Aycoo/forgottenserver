@@ -656,3 +656,45 @@ bool CreatureEvent::executeOnDisappear(Creature* creature)
 
 	return m_scriptInterface->callFunction(1);
 }
+
+bool CreatureEvent::executeCombat(Creature* creature, Creature* target, bool aggressive)
+{
+	//executeOnCombat(cid, target, isAgressive)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeOnCombat] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(m_scriptId, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(m_scriptId);
+	lua_pushnumber(L, creature->getID());
+	lua_pushnumber(L, target->getID());
+	lua_pushboolean(L, aggressive);
+
+	return m_scriptInterface->callFunction(3);
+}
+
+bool CreatureEvent::executeCombatArea(Creature* creature, Tile* tile, bool aggressive)
+{
+	//executeCombatArea(cid, position, isAgressive)
+	if (!m_scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeCombatArea] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
+	env->setScriptId(m_scriptId, m_scriptInterface);
+
+	lua_State* L = m_scriptInterface->getLuaState();
+
+	m_scriptInterface->pushFunction(m_scriptId);
+	lua_pushnumber(L, creature->getID());
+	m_scriptInterface->pushPosition(L, tile->getPosition(), 0);
+	lua_pushboolean(L, aggressive);
+
+	return m_scriptInterface->callFunction(3);
+}

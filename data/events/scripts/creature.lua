@@ -69,7 +69,7 @@ function Creature:onChangeOutfit(newOutfit, oldOutfit)
 	end
 	-- return true so the player is able to change his outfit or return false and the old outfit will stay.
 	-- start scripting from here on.
-	return true
+	return true, newOutfit
 end
 
 function Creature:onAttack(target)
@@ -93,4 +93,8 @@ function Creature:onHear(sayCreature, words, type, pos)
 	end
 	-- doesn't need a return value.
 	-- start scripting from here on.
+end
+
+function Creature:onMove(fromPosition, toPosition)
+	return true
 end

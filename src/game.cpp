@@ -978,8 +978,10 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 	Cylinder* fromTile = creature->getTile();
 	Cylinder* toTile = nullptr;
 
-	creature->setLastPosition(creature->getPosition());
 	const Position& currentPos = creature->getPosition();
+
+	creature->setLastPosition(creature->getPosition());
+	
 	Position destPos = currentPos;
 	bool diagonalMovement;
 
@@ -1023,6 +1025,13 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 				}
 			}
 		}
+	}
+
+	if (!g_events->eventCreatureOnMove(creature, currentPos, destPos))
+	{
+		creature->stopEventWalk();
+		creature->onWalkAborted();
+		return RET_NOTPOSSIBLE;
 	}
 
 	toTile = getTile(destPos);
@@ -3301,14 +3310,15 @@ void Game::playerTurn(uint32_t playerId, Direction dir)
 
 void Game::playerRequestOutfit(uint32_t playerId)
 {
-	if (!g_config.getBoolean(ConfigManager::ALLOW_CHANGEOUTFIT)) {
-		return;
-	}
-
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
 		return;
 	}
+
+	if (!player->getConfigBoolean(PLAYER_ALLOW_CHANGEOUTFIT)) {
+		return;
+	}
+
 
 	player->sendOutfitWindow();
 }
@@ -3325,12 +3335,12 @@ void Game::playerToggleMount(uint32_t playerId, bool mount)
 
 void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 {
-	if (!g_config.getBoolean(ConfigManager::ALLOW_CHANGEOUTFIT)) {
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
 		return;
 	}
 
-	Player* player = getPlayerByID(playerId);
-	if (!player) {
+	if (!player->getConfigBoolean(PLAYER_ALLOW_CHANGEOUTFIT)) {
 		return;
 	}
 
@@ -3764,11 +3774,13 @@ void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 
 void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outfit)
 {
-	if (!g_events->eventCreatureOnChangeOutfit(creature, outfit, creature->getCurrentOutfit())) {
+	Outfit_t newOutfit = outfit;
+
+	if (!g_events->eventCreatureOnChangeOutfit(creature, newOutfit, creature->getCurrentOutfit())) {
 		return;
 	}
 
-	creature->setCurrentOutfit(outfit);
+	creature->setCurrentOutfit(newOutfit);
 
 	if (creature->isInvisible()) {
 		return;
@@ -3778,7 +3790,7 @@ void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outf
 	SpectatorVec list;
 	getSpectators(list, creature->getPosition(), true, true);
 	for (Creature* spectator : list) {
-		spectator->getPlayer()->sendCreatureChangeOutfit(creature, outfit);
+		spectator->getPlayer()->sendCreatureChangeOutfit(creature, newOutfit);
 	}
 }
 
@@ -3822,7 +3834,7 @@ bool Game::combatBlockHit(CombatType_t combatType, Creature* attacker, Creature*
 	SpectatorVec list;
 	getSpectators(list, targetPos, false, true);
 
-	if (!target->isAttackable() || Combat::canDoCombat(attacker, target) != RET_NOERROR) {
+	if (!target->isAttackable() || Combat::canDoCombat(attacker, target, true) != RET_NOERROR) {
 		if (!target->isInGhostMode()) {
 			addMagicEffect(list, targetPos, CONST_ME_POFF);
 		}
@@ -4061,7 +4073,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		SpectatorVec list;
 		getSpectators(list, targetPos, true, true);
 
-		if (!target->isAttackable() || Combat::canDoCombat(attacker, target) != RET_NOERROR) {
+		if (!target->isAttackable() || Combat::canDoCombat(attacker, target, true) != RET_NOERROR) {
 			addMagicEffect(list, targetPos, CONST_ME_POFF);
 			return true;
 		}
@@ -4290,7 +4302,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 		target->changeMana(manaChange);
 	} else {
 		const Position& targetPos = target->getPosition();
-		if (!target->isAttackable() || Combat::canDoCombat(attacker, target) != RET_NOERROR) {
+		if (!target->isAttackable() || Combat::canDoCombat(attacker, target, true) != RET_NOERROR) {
 			addMagicEffect(targetPos, CONST_ME_POFF);
 			return false;
 		}

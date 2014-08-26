@@ -182,6 +182,42 @@ bool ConfigManager::getBoolean(boolean_config_t _what) const
 	}
 }
 
+bool ConfigManager::setString(string_config_t _what, std::string value) 
+{
+	if (m_isLoaded && _what < LAST_STRING_CONFIG) {
+		m_confString[_what] = value;
+		return true;
+	}
+	else {
+		std::cout << "[Warning - ConfigManager::setString] " << _what << std::endl;
+		return false;
+	}
+}
+
+bool ConfigManager::setNumber(number_config_t _what, double value) 
+{
+	if (m_isLoaded && _what < LAST_NUMBER_CONFIG) {
+		m_confNumber[_what] = value;
+		return true;
+	}
+	else {
+		std::cout << "[Warning - ConfigManager::setNumber] " << _what << std::endl;
+		return false;
+	}
+}
+
+bool ConfigManager::setBoolean(boolean_config_t _what, bool value)
+{
+	if (m_isLoaded && _what < LAST_BOOLEAN_CONFIG) {
+		m_confBoolean[_what] = value;
+		return true;
+	}
+	else {
+		std::cout << "[Warning - ConfigManager::setBoolean] " << _what << std::endl;
+		return false;
+	}
+}
+
 
 std::string ConfigManager::getGlobalString(lua_State* _L, const std::string& _identifier, const std::string& _default)
 {

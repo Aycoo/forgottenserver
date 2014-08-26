@@ -109,3 +109,18 @@ end
 function Player:onLoseExperience(exp)
 	return exp
 end
+
+function Player:getMissionDescription(description)
+
+	description = customMissionDescription:onMissionDescription(self, description)
+	
+	if not description then
+		return false
+	end
+	
+	return true, description
+end
+
+function Player:onSave(GUID)
+	return true
+end
