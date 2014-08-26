@@ -1,6 +1,10 @@
 dofile('data/compat.lua')
 dofile('data/management.lua')
 
+ddos = {};
+ddos.enabled = false;
+ddos.broadcasted = false
+
 TRUE = true
 FALSE = false
 

@@ -50,6 +50,11 @@ end
 
 -- Events start from here on!
 function Creature:onTarget(target, isAttacked)
+	if self:isMonster() then
+		if ddos.enabled then
+			return false
+		end
+	end
 	if not register(self, Register.target) then
 		return true
 	end
