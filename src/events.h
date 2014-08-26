@@ -49,6 +49,7 @@ class Events
 		bool eventPlayerOnMoveCreature(Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition);
 		bool eventPlayerOnTurn(Player* player, Direction direction);
 		bool eventPlayerOnTradeRequest(Player* player, Player* target, Item* item);
+
 		void eventPlayerOnGainExperience(Player* player, Creature* target, uint64_t &exp, uint64_t rawExp);
 		void eventPlayerOnLoseExperience(Player* player, uint64_t &exp);
 		bool eventPlayerGetCustomMissionDescription(Player* player, std::string& description);

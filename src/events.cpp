@@ -515,9 +515,11 @@ bool Events::eventPlayerOnTradeRequest(Player* player, Player* target, Item* ite
 
 	return scriptInterface.callFunction(3);
 }
+
 void Events::eventPlayerOnGainExperience(Player* player, Creature* target, uint64_t &exp, uint64_t rawExp)
 {
 	// Player:onGainExperience(target(= nil, if there is no target), exp, rawExp) or Player.onGainExperience(self, target, exp, rawExp)
+
 	if (playerOnGainExperience == -1) {
 		return;
 	}
@@ -548,6 +550,7 @@ void Events::eventPlayerOnGainExperience(Player* player, Creature* target, uint6
 	lua_pushnumber(L, rawExp);
 
 	if (scriptInterface.protectedCall(L, 4, 1) != 0) {
+
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	}
 	else {
@@ -628,9 +631,9 @@ bool Events::eventPlayerGetCustomMissionDescription(Player* player, std::string&
 	return result;
 }
 
-bool Events::eventPlayerOnSave(Player* player )
+bool Events::eventPlayerOnSave(Player* player)
 {
-	// Player:OnSave( guid )
+	// Player:OnSave(guid)
 	if (playerOnSave == -1) {
 		return true;
 	}

@@ -1836,6 +1836,11 @@ void Player::addExperience(Creature* target, uint64_t exp, bool sendText/* = fal
 
 	g_events->eventPlayerOnGainExperience(this, target, exp, rawExp);
 
+	if (exp <= 0)
+	{
+		return;
+	}
+
 	experience += exp;
 
 	if (sendText) {
