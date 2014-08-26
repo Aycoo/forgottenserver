@@ -81,6 +81,8 @@ Creature::Creature() :
 
 	hiddenHealth = false;
 
+	canWalk = true;
+
 	onIdleStatus();
 }
 

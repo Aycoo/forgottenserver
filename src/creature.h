@@ -468,6 +468,13 @@ class Creature : virtual public Thing
 			}
 		}
 
+		bool isAbleToMove() {
+			return canWalk;
+		}
+		void canMove(bool n) {
+			canWalk = n;
+		}
+
 	protected:
 		virtual bool useCacheMap() const {
 			return false;
@@ -534,6 +541,7 @@ class Creature : virtual public Thing
 		bool hasFollowPath;
 		bool forceUpdateFollowPath;
 		bool hiddenHealth;
+		bool canWalk;
 
 		//creature script events
 		bool hasEventRegistered(CreatureEventType_t event) const {

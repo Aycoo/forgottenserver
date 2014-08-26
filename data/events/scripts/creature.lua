@@ -101,5 +101,5 @@ function Creature:onHear(sayCreature, words, type, pos)
 end
 
 function Creature:onMove(fromPosition, toPosition)
-	return true
+	return self:isAbleToMove()
 end

@@ -163,7 +163,6 @@ Player::Player(ProtocolGame* p) :
 	m_confNumber[PLAYER_EX_ACTIONS_DELAY_INTERVAL] = g_config.getNumber(ConfigManager::EX_ACTIONS_DELAY_INTERVAL);
 
 	m_confNumber[PLAYER_NO_SKULL]       = false;
-	m_confNumber[PLAYER_NO_SECURE_MODE] = false;
 
 	maxDepotItems = 1000;
 	maxVipEntries = 20;
@@ -3669,7 +3668,7 @@ void Player::onAttackedCreature(Creature* target)
 				sendIcons();
 			}
 
-			if (this->getConfigBoolean(PLAYER_NO_SKULL) == true)
+			if (getConfigBoolean(PLAYER_NO_SKULL) == true)
 			{
 				addInFightTicks();
 				return;
