@@ -1,5 +1,6 @@
 dofile('data/compat.lua')
 dofile('data/management.lua')
+dofile('data/lib/LoadLibs.lua' )
 
 ddos = {};
 ddos.enabled = false;

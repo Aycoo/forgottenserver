@@ -118,6 +118,9 @@ class ConfigManager
 		double getNumber(number_config_t _what) const;
 		bool getBoolean(boolean_config_t _what) const;
 
+		bool setString(string_config_t _what, std::string value);
+		bool setNumber(number_config_t _what, double value);
+		bool setBoolean(boolean_config_t _what, bool value);
 	private:
 		static std::string getGlobalString(lua_State* _L, const std::string& _identifier, const std::string& _default = "");
 		static double getGlobalNumber(lua_State* _L, const std::string& _identifier, const int32_t _default = 0);

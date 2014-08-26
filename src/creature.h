@@ -566,6 +566,7 @@ class Creature : virtual public Thing
 		friend class Map;
 		friend class Commands;
 		friend class LuaScriptInterface;
+		friend class Combat;
 };
 
 #endif

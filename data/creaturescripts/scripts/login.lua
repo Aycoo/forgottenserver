@@ -16,5 +16,6 @@ function onLogin(cid)
 
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("Management")
+	
 	return true
 end

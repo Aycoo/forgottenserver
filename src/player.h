@@ -36,6 +36,7 @@
 #include "groups.h"
 #include "town.h"
 #include "mounts.h"
+#include "configmanager.h"
 
 class House;
 class NetworkMessage;
@@ -116,6 +117,29 @@ struct OutfitEntry {
 
 	uint16_t lookType;
 	uint8_t addons;
+};
+
+enum player_boolean_config_t {
+	PLAYER_ALLOW_CHANGEOUTFIT = 0,
+	PLAYER_REMOVE_AMMO = 1,
+	PLAYER_REMOVE_RUNE_CHARGES = 2,
+	PLAYER_EXPERIENCE_FROM_PLAYERS = 3,
+	PLAYER_NO_SKULL = 4,
+	PLAYER_NO_SECURE_MODE = 5,
+
+	PLAYER_LAST_BOOLEAN_CONFIG /* this must be the last one */
+};
+
+enum player_string_config_t {
+	PLAYER_DUMMY_STRING_CONFIG = 0,
+	PLAYER_LAST_STRING_CONFIG /* this must be the last one */
+};
+
+enum player_number_config_t {
+	PLAYER_ACTIONS_DELAY_INTERVAL = 0,
+	PLAYER_EX_ACTIONS_DELAY_INTERVAL = 1,
+
+	PLAYER_LAST_NUMBER_CONFIG /* this must be the last one */
 };
 
 typedef std::map<uint32_t, uint32_t> MuteCountMap;
@@ -299,6 +323,8 @@ class Player : public Creature, public Cylinder
 		}
 
 		secureMode_t getSecureMode() const {
+			if (this->getConfigBoolean(SECUREMODE_OFF) == true)
+				return SECUREMODE_OFF;
 			return secureMode;
 		}
 
@@ -1174,6 +1200,28 @@ class Player : public Creature, public Cylinder
 		void setRate(skills_t skill, double value){
 			rates[skill] = value;
 		}
+
+		const std::string& getConfigString(player_string_config_t _what) {
+			return m_confString[_what];
+		}
+		double getConfigNumber(player_number_config_t _what){
+			return m_confNumber[_what];
+		}
+		bool getConfigBoolean(player_boolean_config_t _what){
+			return m_confBoolean[_what];
+		}
+
+		void setConfigString(player_string_config_t _what, std::string value){
+			m_confString[_what] = value;
+		}
+
+		void setConfigNumber(player_number_config_t _what, double value){
+			m_confNumber[_what] = value;
+		}
+
+		void setConfigBoolean(player_boolean_config_t _what, bool value){
+			m_confBoolean[_what] = value;
+		}
 	protected:
 		void checkTradeState(const Item* item);
 		bool hasCapacity(const Item* item, uint32_t count) const;
@@ -1344,6 +1392,10 @@ class Player : public Creature, public Cylinder
 		bool inventoryAbilities[CONST_SLOT_LAST + 1];
 
 		double rates[SKILL_LEVEL + 1];
+
+		std::string m_confString[PLAYER_LAST_STRING_CONFIG];
+		double m_confNumber[PLAYER_LAST_NUMBER_CONFIG];
+		bool m_confBoolean[PLAYER_LAST_BOOLEAN_CONFIG];
 
 		static uint32_t playerAutoID;
 

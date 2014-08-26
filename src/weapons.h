@@ -101,7 +101,7 @@ class Weapon : public Event
 		bool internalUseWeapon(Player* player, Item* item, Tile* tile) const;
 
 		void onUsedWeapon(Player* player, Item* item) const;
-		virtual void onUsedAmmo(Item* item, Tile* destTile) const;
+		virtual void onUsedAmmo(Player* player, Item* item, Tile* destTile) const;
 		virtual bool getSkillType(const Player*, const Item*, skills_t&, uint32_t&) const {
 			return false;
 		}
@@ -168,7 +168,7 @@ class WeaponDistance : public Weapon
 		CombatType_t getElementType() const { return elementType; }
 
 	protected:
-		virtual void onUsedAmmo(Item* item, Tile* destTile) const;
+		virtual void onUsedAmmo(Player* player, Item* item, Tile* destTile) const;
 		virtual bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const;
 
 		int32_t hitChance;

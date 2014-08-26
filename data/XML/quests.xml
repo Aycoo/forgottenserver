@@ -11,4 +11,11 @@
 			<missionstate id="5" description="Example description 2"/>
 		</mission>
 	</quest>
+	
+	<quest name="Cool Society Quest" startstorageid="1002" startstoragevalue="1">
+		<mission name="Being cool" custom ="1" storageid="1002" startvalue="1" endvalue="2">
+			<missionstate id="1" description="BeingCoolDescriptionId"/>
+		</mission>
+	</quest>
+	
 </quests>

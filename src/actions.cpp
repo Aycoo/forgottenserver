@@ -375,7 +375,7 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 	}
 
 	player->setNextActionTask(nullptr);
-	player->setNextAction(OTSYS_TIME() + g_config.getNumber(ConfigManager::ACTIONS_DELAY_INTERVAL));
+	player->setNextAction(OTSYS_TIME() + player->getConfigNumber(PLAYER_ACTIONS_DELAY_INTERVAL));
 	player->stopWalk();
 
 	if (isHotkey) {
@@ -399,7 +399,7 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 	}
 
 	player->setNextActionTask(nullptr);
-	player->setNextAction(OTSYS_TIME() + g_config.getNumber(ConfigManager::EX_ACTIONS_DELAY_INTERVAL));
+	player->setNextAction(OTSYS_TIME() + player->getConfigNumber( PLAYER_EX_ACTIONS_DELAY_INTERVAL ) );
 	player->stopWalk();
 
 	Action* action = getAction(item);
