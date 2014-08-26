@@ -684,7 +684,7 @@ bool Events::eventCreatureOnTarget(Creature* creature, Creature* target, bool is
 	return scriptInterface.callFunction(3);
 }
 
-bool Events::eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t newOutfit, const Outfit_t oldOutfit)
+bool Events::eventCreatureOnChangeOutfit(Creature* creature, Outfit_t& newOutfit, const Outfit_t oldOutfit)
 {
 	// Creature:onChangeOutfit(newOutfit, oldOutfit)
 	if (creatureOnChangeOutfit == -1) {
@@ -708,7 +708,16 @@ bool Events::eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t newO
 	LuaScriptInterface::pushOutfit(L, newOutfit);
 	LuaScriptInterface::pushOutfit(L, oldOutfit);
 
-	return scriptInterface.callFunction(3);
+	bool success = scriptInterface.callFunction(3, 2, false);
+	if (success)
+	{
+		newOutfit = scriptInterface.getOutfit(L, -1);
+	}
+
+	lua_settop(L, 0);
+	LuaScriptInterface::resetScriptEnv();
+
+	return success;
 }
 
 bool Events::eventCreatureOnAttack(Creature* creature, Creature* target)

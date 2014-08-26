@@ -56,7 +56,7 @@ class Events
 
 		// Creature
 		bool eventCreatureOnTarget(Creature* creature, Creature* target, bool isAttacked);
-		bool eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t outfit, const Outfit_t oldOutfit);
+		bool eventCreatureOnChangeOutfit(Creature* creature, Outfit_t& outfit, const Outfit_t oldOutfit);
 		bool eventCreatureOnAttack(Creature* creature, Creature* target);
 		void eventCreatureOnHear(Creature* creature, Creature* sayCreature, const std::string words, enum SpeakClasses type, Position pos);
 		bool eventCreatureOnMove(Creature* creature, Position fromPos, Position toPos);
