@@ -21,6 +21,7 @@
 #define FS_EVENTS_H_BD444CC0EE167E5777E4C90C766B36DC
 
 #include "luascript.h"
+#include "enums.h"
 
 class Party;
 class ItemType;
@@ -57,6 +58,7 @@ class Events
 
 		// Creature
 		bool eventCreatureOnTarget(Creature* creature, Creature* target, bool isAttacked);
+
 		bool eventCreatureOnChangeOutfit(Creature* creature, Outfit_t& outfit, const Outfit_t oldOutfit);
 		bool eventCreatureOnAttack(Creature* creature, Creature* target);
 		void eventCreatureOnHear(Creature* creature, Creature* sayCreature, const std::string words, enum SpeakClasses type, Position pos);
