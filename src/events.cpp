@@ -23,6 +23,7 @@
 #include "tools.h"
 #include "item.h"
 #include "player.h"
+#include "enums.h"
 
 #include <set>
 
@@ -750,7 +751,7 @@ bool Events::eventCreatureOnAttack(Creature* creature, Creature* target)
 	return scriptInterface.callFunction(2);
 }
 
-void Events::eventCreatureOnHear(Creature* creature, Creature* sayCreature, const std::string words, SpeakClasses type, Position pos)
+void Events::eventCreatureOnHear(Creature* creature, Creature* sayCreature, const std::string words, enum SpeakClasses type, Position pos)
 {
 	// Creature:onHear(sayCreature, words, type, pos)
 	if (creatureOnHear == -1) {
