@@ -158,11 +158,10 @@ Player::Player(ProtocolGame* p) :
 	m_confBoolean[PLAYER_ALLOW_CHANGEOUTFIT] = g_config.getBoolean(ConfigManager::ALLOW_CHANGEOUTFIT);
 	m_confBoolean[PLAYER_REMOVE_RUNE_CHARGES] = g_config.getBoolean(ConfigManager::REMOVE_RUNE_CHARGES);
 	m_confBoolean[PLAYER_REMOVE_AMMO] = g_config.getBoolean(ConfigManager::REMOVE_AMMO);
+	m_confBoolean[PLAYER_NO_SKULL] = false;
 
 	m_confNumber[PLAYER_ACTIONS_DELAY_INTERVAL] = g_config.getNumber(ConfigManager::EX_ACTIONS_DELAY_INTERVAL);
 	m_confNumber[PLAYER_EX_ACTIONS_DELAY_INTERVAL] = g_config.getNumber(ConfigManager::EX_ACTIONS_DELAY_INTERVAL);
-
-	m_confNumber[PLAYER_NO_SKULL] = false;
 
 	maxDepotItems = 1000;
 	maxVipEntries = 20;
