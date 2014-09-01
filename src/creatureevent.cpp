@@ -225,6 +225,12 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		m_type = CREATURE_EVENT_APPEAR;
 	} else if (tmpStr == "disappear") {
 		m_type = CREATURE_EVENT_DISAPPEAR;
+	}
+	else if (tmpStr == "combat") {
+		m_type = CREATURE_EVENT_COMBAT;
+	}
+	else if (tmpStr == "combatarea") {
+		m_type = CREATURE_EVENT_COMBATAREA;
 	} else {
 		std::cout << "[Error - CreatureEvent::configureEvent] Invalid type for creature event: " << m_eventName << std::endl;
 		return false;
@@ -279,6 +285,12 @@ std::string CreatureEvent::getScriptEventName()
 
 		case CREATURE_EVENT_DISAPPEAR:
 			return "onDisappear";
+
+		case CREATURE_EVENT_COMBAT:
+			return "onCombat";
+
+		case CREATURE_EVENT_COMBATAREA:
+			return "onCombatArea";
 
 		case CREATURE_EVENT_NONE:
 		default:
@@ -659,7 +671,7 @@ bool CreatureEvent::executeOnDisappear(Creature* creature)
 
 bool CreatureEvent::executeCombat(Creature* creature, Creature* target, bool aggressive)
 {
-	//executeOnCombat(cid, target, isAgressive)
+	//onCombat(cid, target, isAgressive)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - CreatureEvent::executeOnCombat] Call stack overflow" << std::endl;
 		return false;
@@ -680,7 +692,7 @@ bool CreatureEvent::executeCombat(Creature* creature, Creature* target, bool agg
 
 bool CreatureEvent::executeCombatArea(Creature* creature, Tile* tile, bool aggressive)
 {
-	//executeCombatArea(cid, position, isAgressive)
+	//onCombatArea(cid, position, isAgressive)
 	if (!m_scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - CreatureEvent::executeCombatArea] Call stack overflow" << std::endl;
 		return false;

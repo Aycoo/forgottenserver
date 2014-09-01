@@ -1801,6 +1801,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("playerConfigKeys", PLAYER_ALLOW_CHANGEOUTFIT);
 	registerEnumIn("playerConfigKeys", PLAYER_REMOVE_AMMO);
 	registerEnumIn("playerConfigKeys", PLAYER_REMOVE_RUNE_CHARGES);
+	registerEnumIn("playerConfigKeys", PLAYER_NO_SKULL);
+	registerEnumIn("playerConfigKeys", PLAYER_NO_SECURE_MODE);
 
 	registerEnumIn("playerConfigKeys", PLAYER_ACTIONS_DELAY_INTERVAL);
 	registerEnumIn("playerConfigKeys", PLAYER_EX_ACTIONS_DELAY_INTERVAL);
@@ -7771,8 +7773,10 @@ int32_t LuaScriptInterface::luaCreatureSetOutfit(lua_State* L)
 	// creature:setOutfit(outfit)
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
-		creature->defaultOutfit = getOutfit(L, 2);
-		g_game.internalCreatureChangeOutfit(creature, creature->defaultOutfit);
+		Outfit_t outfit = getOutfit(L, 2);
+		if (g_game.internalCreatureChangeOutfit(creature, outfit))
+			creature->defaultOutfit = outfit;
+
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

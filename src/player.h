@@ -323,8 +323,6 @@ class Player : public Creature, public Cylinder
 		}
 
 		secureMode_t getSecureMode() const {
-			if (this->getConfigBoolean(SECUREMODE_OFF) == true)
-				return SECUREMODE_OFF;
 			return secureMode;
 		}
 
@@ -1201,13 +1199,13 @@ class Player : public Creature, public Cylinder
 			rates[skill] = value;
 		}
 
-		const std::string& getConfigString(player_string_config_t _what) {
+		const std::string& getConfigString(player_string_config_t _what) const {
 			return m_confString[_what];
 		}
-		double getConfigNumber(player_number_config_t _what){
+		double getConfigNumber(player_number_config_t _what) const{
 			return m_confNumber[_what];
 		}
-		bool getConfigBoolean(player_boolean_config_t _what){
+		bool getConfigBoolean(player_boolean_config_t _what) const{
 			return m_confBoolean[_what];
 		}
 

@@ -162,8 +162,8 @@ Player::Player(ProtocolGame* p) :
 	m_confNumber[PLAYER_ACTIONS_DELAY_INTERVAL] = g_config.getNumber(ConfigManager::EX_ACTIONS_DELAY_INTERVAL);
 	m_confNumber[PLAYER_EX_ACTIONS_DELAY_INTERVAL] = g_config.getNumber(ConfigManager::EX_ACTIONS_DELAY_INTERVAL);
 
-	m_confNumber[PLAYER_NO_SKULL]       = false;
-	m_confNumber[PLAYER_NO_SECURE_MODE] = false;
+	m_confBoolean[PLAYER_NO_SKULL] = false;
+	m_confBoolean[PLAYER_NO_SECURE_MODE] = false;
 
 	maxDepotItems = 1000;
 	maxVipEntries = 20;
@@ -3653,6 +3653,12 @@ void Player::onAttackedCreature(Creature* target)
 		return;
 	}
 
+	if (this->getConfigBoolean(PLAYER_NO_SKULL) == true)
+	{
+		addInFightTicks();
+		return;
+	}
+
 	Player* targetPlayer = target->getPlayer();
 	if (targetPlayer && !isPartner(targetPlayer) && !isGuildMate(targetPlayer)) {
 		if (!pzLocked && g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED) {
@@ -3667,12 +3673,6 @@ void Player::onAttackedCreature(Creature* target)
 			if (!pzLocked) {
 				pzLocked = true;
 				sendIcons();
-			}
-
-			if (this->getConfigBoolean(PLAYER_NO_SKULL) == true)
-			{
-				addInFightTicks();
-				return;
 			}
 
 			if (!Combat::isInPvpZone(this, targetPlayer) && !isInWar(targetPlayer)) {

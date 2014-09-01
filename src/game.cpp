@@ -3375,13 +3375,13 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 	}
 
 	if (player->canWear(outfit.lookType, outfit.lookAddons)) {
-		player->defaultOutfit = outfit;
 
 		if (player->hasCondition(CONDITION_OUTFIT)) {
 			return;
 		}
 
-		internalCreatureChangeOutfit(player, outfit);
+		if (internalCreatureChangeOutfit(player, outfit))
+			player->defaultOutfit = outfit;
 	}
 }
 
@@ -3772,26 +3772,27 @@ void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 	}
 }
 
-void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outfit)
+bool Game::internalCreatureChangeOutfit(Creature* creature, Outfit_t& outfit)
 {
-	Outfit_t newOutfit = outfit;
 
-	if (!g_events->eventCreatureOnChangeOutfit(creature, newOutfit, creature->getCurrentOutfit())) {
-		return;
+	if (!g_events->eventCreatureOnChangeOutfit(creature, outfit, creature->getCurrentOutfit())) {
+		return false;
 	}
 
-	creature->setCurrentOutfit(newOutfit);
+	creature->setCurrentOutfit(outfit);
 
 	if (creature->isInvisible()) {
-		return;
+		return true;
 	}
 
 	//send to clients
 	SpectatorVec list;
 	getSpectators(list, creature->getPosition(), true, true);
 	for (Creature* spectator : list) {
-		spectator->getPlayer()->sendCreatureChangeOutfit(creature, newOutfit);
+		spectator->getPlayer()->sendCreatureChangeOutfit(creature, outfit);
 	}
+
+	return true;
 }
 
 void Game::internalCreatureChangeVisible(Creature* creature, bool visible)

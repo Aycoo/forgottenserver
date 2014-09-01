@@ -1663,7 +1663,9 @@ void ConditionOutfit::changeOutfit(Creature* creature, int32_t index /*= -1*/)
 
 void ConditionOutfit::endCondition(Creature* creature)
 {
-	g_game.internalCreatureChangeOutfit(creature, creature->getDefaultOutfit());
+	Outfit_t outfit = creature->getDefaultOutfit();
+	g_game.internalCreatureChangeOutfit(creature, outfit);
+	creature->setCurrentOutfit(outfit);
 }
 
 void ConditionOutfit::addCondition(Creature* creature, const Condition* addCondition)
