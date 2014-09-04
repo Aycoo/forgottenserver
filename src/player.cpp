@@ -162,7 +162,7 @@ Player::Player(ProtocolGame* p) :
 	m_confNumber[PLAYER_ACTIONS_DELAY_INTERVAL] = g_config.getNumber(ConfigManager::EX_ACTIONS_DELAY_INTERVAL);
 	m_confNumber[PLAYER_EX_ACTIONS_DELAY_INTERVAL] = g_config.getNumber(ConfigManager::EX_ACTIONS_DELAY_INTERVAL);
 
-	m_confBoolean[PLAYER_NO_SKULL] = false;
+	m_confBoolean[PLAYER_NO_SKULL]       = false;
 	m_confBoolean[PLAYER_NO_SECURE_MODE] = false;
 
 	maxDepotItems = 1000;
@@ -3653,7 +3653,7 @@ void Player::onAttackedCreature(Creature* target)
 		return;
 	}
 
-	if (this->getConfigBoolean(PLAYER_NO_SKULL) == true)
+	if (!this->getConfigBoolean(PLAYER_NO_SKULL))
 	{
 		addInFightTicks();
 		return;

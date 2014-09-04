@@ -265,7 +265,7 @@ ReturnValue Combat::canTargetCreature(const Player* player, const Creature* targ
 			return RET_YOUMAYNOTATTACKTHISPLAYER;
 		}
 
-		if ((player->getConfigBoolean(PLAYER_NO_SECURE_MODE) == false && player->getSecureMode() == SECUREMODE_ON) && !Combat::isInPvpZone(player, target) &&
+		if ((!player->getConfigBoolean(PLAYER_NO_SECURE_MODE) && player->getSecureMode() == SECUREMODE_ON) && !Combat::isInPvpZone(player, target) &&
 		        player->getSkullClient(target->getPlayer()) == SKULL_NONE) {
 			return RET_TURNSECUREMODETOATTACKUNMARKEDPLAYERS;
 		}
@@ -276,7 +276,6 @@ ReturnValue Combat::canTargetCreature(const Player* player, const Creature* targ
 
 ReturnValue Combat::canDoCombat(const Creature* caster, const Tile* tile, bool isAggressive)
 {
-	
 	bool success = true;
 
 	//scripting event - onCombatArea
@@ -288,11 +287,10 @@ ReturnValue Combat::canDoCombat(const Creature* caster, const Tile* tile, bool i
 		}
 	}
 
-	if (!success)
+	if (!success){
 		return RET_NOTPOSSIBLE;
-	
-
-
+	}
+		
 	if (tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
 		return RET_NOTENOUGHROOM;
 	}
