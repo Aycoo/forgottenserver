@@ -50,6 +50,10 @@
 #include "spawn.h"
 #include "connection.h"
 #include "events.h"
+#include "weapons.h"
+#include "movement.h"
+#include "monster.h"
+
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -60,6 +64,10 @@ extern Vocations g_vocations;
 extern GlobalEvents* g_globalEvents;
 extern Events* g_events;
 extern CreatureEvents* g_creatureEvents;
+extern Weapons* g_weapons;
+extern MoveEvents* g_moveEvents;
+extern Monsters g_monsters;
+extern LuaEnvironment g_luaEnvironment;
 
 Game::Game() :
 	wildcardTree(false),
@@ -5881,5 +5889,89 @@ void Game::removeBedSleeper(uint32_t guid)
 	auto it = bedSleepersMap.find(guid);
 	if (it != bedSleepersMap.end()) {
 		bedSleepersMap.erase(it);
+	}
+}
+
+bool Game::reloadInfo(ReloadType type)
+{
+	if (type < RELOADTYPE_LAST)	{
+
+		bool result = true;
+
+		switch (type) {
+		case RELOADTYPE_GLOBAL:
+			result = g_luaEnvironment.loadFile("data/global.lua") == 0;
+			break;
+		case RELOADTYPE_ACTIONS:
+			result = g_actions->reload();
+			break;
+		case RELOADTYPE_CONFIG:
+			result = g_config.reload();
+			break;
+		case RELOADTYPE_COMMANDS:
+			result = commands.reload();
+			break;
+		case RELOADTYPE_CREATURESCRIPTS:
+			result = g_creatureEvents->reload();
+			break;
+		case RELOADTYPE_MONSTERS:
+			result = g_monsters.reload();
+			break;
+		case RELOADTYPE_MOVEMENTS:
+			result = g_moveEvents->reload();
+			break;
+		case RELOADTYPE_NPCS:
+			Npcs::reload();
+			break;
+		case RELOADTYPE_RAIDS:
+			result = Raids::getInstance()->reload();
+			if (result){
+				result = Raids::getInstance()->startup();
+			}
+			break;
+		case RELOADTYPE_SPELLS:
+			result = g_spells->reload();
+			if (result){
+				result = g_monsters.reload();
+			}
+			break;
+		case RELOADTYPE_TALKACTIONS:
+			result = g_talkActions->reload();
+			break;
+		case RELOADTYPE_ITEMS:
+			result = Item::items.reload();
+			break;
+		case RELOADTYPE_WEPONS:
+			result = g_weapons->reload();
+			if (result){
+				g_weapons->loadDefaults();
+			}
+			break;
+		case RELOADTYPE_QUESTS:
+			result = Quests::getInstance()->reload();
+			break;
+		case RELOADTYPE_MOUNTS:
+			result = Mounts::getInstance()->reload();
+			break;
+		case RELOADTYPE_GLOBALEVENTS:
+			result = g_globalEvents->reload();
+			break;
+		case RELOADTYPE_EVENTS:
+			result = g_events->load();
+			break;
+		case RELOADTYPE_CHATCHANNELS:
+			result = g_chat.load();
+			break;
+		default:
+			std::cout << "[Error - Game::reloadInfo] Reload type not found: " << type << std::endl;
+			result = false;
+			break;
+		}
+
+		return result;
+	}
+	else{
+		std::cout << "[Error - Game::reloadInfo] Invalid reload type: " << type << std::endl;
+		return false;
 	}
 }

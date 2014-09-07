@@ -54,6 +54,9 @@ extern ConfigManager g_config;
 extern Vocations g_vocations;
 extern Spells* g_spells;
 
+
+
+
 enum {
 	EVENT_ID_LOADING = 1,
 	EVENT_ID_USER = 1000,
@@ -1138,6 +1141,9 @@ void LuaScriptInterface::registerFunctions()
 	//sendGuildChannelMessage(guildId, type, message)
 	lua_register(m_luaState, "sendGuildChannelMessage", LuaScriptInterface::luaSendGuildChannelMessage);
 
+	//reloadInfo(reloadType)
+	lua_register(m_luaState, "reloadInfo", LuaScriptInterface::luaReloadInfo);
+
 #ifndef LUAJIT_VERSION
 	//bit operations for Lua, based on bitlib project release 24
 	//bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
@@ -1718,6 +1724,28 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ORIGIN_SPELL)
 	registerEnum(ORIGIN_MELEE)
 	registerEnum(ORIGIN_RANGED)
+
+	//Use with reloadInfo( function to reload scripts etc )
+
+	registerEnum(RELOADTYPE_GLOBAL)
+	registerEnum(RELOADTYPE_ACTIONS)
+	registerEnum(RELOADTYPE_CONFIG)
+	registerEnum(RELOADTYPE_COMMANDS)
+	registerEnum(RELOADTYPE_CREATURESCRIPTS)
+	registerEnum(RELOADTYPE_MONSTERS)
+	registerEnum(RELOADTYPE_MOVEMENTS)
+	registerEnum(RELOADTYPE_NPCS)
+	registerEnum(RELOADTYPE_RAIDS)
+	registerEnum(RELOADTYPE_SPELLS)
+	registerEnum(RELOADTYPE_TALKACTIONS)
+	registerEnum(RELOADTYPE_ITEMS)
+	registerEnum(RELOADTYPE_WEPONS)
+	registerEnum(RELOADTYPE_QUESTS)
+	registerEnum(RELOADTYPE_MOUNTS)
+	registerEnum(RELOADTYPE_GLOBALEVENTS)
+	registerEnum(RELOADTYPE_EVENTS)
+	registerEnum(RELOADTYPE_CHATCHANNELS)
+	registerEnum(RELOADTYPE_LAST)
 
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
@@ -4449,6 +4477,16 @@ int32_t LuaScriptInterface::luaSendGuildChannelMessage(lua_State* L)
 	std::string message = getString(L, 3);
 	channel->sendToAll(message, type);
 	pushBoolean(L, true);
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaReloadInfo(lua_State* L)
+{
+	//reloadInfo(reloadType)
+	ReloadType type = getNumber<ReloadType>(L, 1);
+
+	bool result = g_game.reloadInfo(type);
+	pushBoolean(L, result);
 	return 1;
 }
 

@@ -535,6 +535,7 @@ class Game
 		void setBedSleeper(BedItem* bed, uint32_t guid);
 		void removeBedSleeper(uint32_t guid);
 
+		bool reloadInfo(ReloadType type);
 	protected:
 		bool playerSayCommand(Player* player, const std::string& text);
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
@@ -608,6 +609,7 @@ class Game
 		uint32_t lastStageLevel;
 		bool stagesEnabled;
 		bool useLastStageLevel;
+
 };
 
 #endif
