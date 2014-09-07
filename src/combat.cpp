@@ -375,8 +375,9 @@ ReturnValue Combat::canDoCombat(const Creature* attacker, const Creature* target
 			}
 		}
 
-		if (!success)
+		if (!success){
 			return RET_NOTPOSSIBLE;
+		}
 		
 
 		if (const Player* targetPlayer = target->getPlayer()) {
