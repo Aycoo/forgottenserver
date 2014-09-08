@@ -693,7 +693,7 @@ void Player::setVarStats(stats_t stat, int32_t modifier)
 int32_t Player::getDefaultStats(stats_t stat) const
 {
 	switch (stat) {
-		case STAT_MAXHITPOINTS: return getMaxHealth() - varStats[STAT_MAXHITPOINTS];
+		case STAT_MAXHITPOINTS: return std::max<uint32_t>(1, ((int64_t)getMaxHealth() - varStats[STAT_MAXHITPOINTS]));
 		case STAT_MAXMANAPOINTS: return getMaxMana() - varStats[STAT_MAXMANAPOINTS];
 		case STAT_SOULPOINTS: return getPlayerInfo(PLAYERINFO_SOUL) - varStats[STAT_SOULPOINTS];
 		case STAT_MAGICPOINTS: return getBaseMagicLevel();
@@ -1932,7 +1932,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 
 	while (level > 1 && experience < currLevelExp) {
 		--level;
-		healthMax = std::max<uint32_t>(0, healthMax - vocation->getHPGain());
+		healthMax = std::max<uint32_t>(1, (int64_t)healthMax - vocation->getHPGain());
 		manaMax = std::max<int32_t>(0, manaMax - vocation->getManaGain());
 		capacity = std::max<double>(0.00, capacity - vocation->getCapGain());
 		currLevelExp = Player::getExpForLevel(level);
@@ -2211,7 +2211,7 @@ void Player::death(Creature* _lastHitCreature)
 
 			while (level > 1 && experience < Player::getExpForLevel(level)) {
 				--level;
-				healthMax = std::max<uint32_t>(0, healthMax - vocation->getHPGain());
+				healthMax = std::max<uint32_t>(1, (int64_t)healthMax - vocation->getHPGain());
 				manaMax = std::max<int32_t>(0, manaMax - vocation->getManaGain());
 				capacity = std::max<double>(0.00, capacity - vocation->getCapGain());
 			}

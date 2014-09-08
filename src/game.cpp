@@ -3967,7 +3967,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 {
 	const Position& targetPos = target->getPosition();
 	if (damage.primary.value > 0) {
-		if (target->getHealth() <= 0) {
+		if (target->getHealth() == 0) {
 			return false;
 		}
 
@@ -4170,7 +4170,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			}
 		}
 
-		int32_t targetHealth = target->getHealth();
+		int64_t targetHealth = target->getHealth();
 		if (damage.primary.value >= targetHealth) {
 			damage.primary.value = targetHealth;
 			damage.secondary.value = 0;
@@ -4187,6 +4187,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					return false;
 				}
 			}
+			realDamage = std::min<int32_t>(targetHealth, realDamage);
 		}
 
 		target->drainHealth(attacker, realDamage);
