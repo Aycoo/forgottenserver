@@ -521,6 +521,7 @@ class LuaScriptInterface
 		static int32_t luaSendChannelMessage(lua_State* L);
 		static int32_t luaSendGuildChannelMessage(lua_State* L);
 
+		static int32_t luaReloadInfo(lua_State* L);
 #ifndef LUAJIT_VERSION
 		static int32_t luaBitNot(lua_State* L);
 		static int32_t luaBitAnd(lua_State* L);

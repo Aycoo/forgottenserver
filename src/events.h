@@ -53,13 +53,13 @@ class Events
 
 		void eventPlayerOnGainExperience(Player* player, Creature* target, uint64_t &exp, uint64_t rawExp);
 		void eventPlayerOnLoseExperience(Player* player, uint64_t &exp);
-		bool eventPlayerGetCustomMissionDescription(Player* player, std::string& description);
+		bool eventPlayerGetCustomMissionDescription(Player* player, std::string &description);
 		bool eventPlayerOnSave(Player* player);
 
 		// Creature
 		bool eventCreatureOnTarget(Creature* creature, Creature* target, bool isAttacked);
 
-		bool eventCreatureOnChangeOutfit(Creature* creature, Outfit_t& outfit, const Outfit_t oldOutfit);
+		void eventCreatureOnChangeOutfit(Creature* creature, Outfit_t &outfit, const Outfit_t oldOutfit);
 		bool eventCreatureOnAttack(Creature* creature, Creature* target);
 		void eventCreatureOnHear(Creature* creature, Creature* sayCreature, const std::string words, SpeakClasses type, Position pos);
 		bool eventCreatureOnMove(Creature* creature, Position fromPos, Position toPos);

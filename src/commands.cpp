@@ -65,7 +65,6 @@ s_defcommands Commands::defined_commands[] = {
 	// TODO: move all commands to talkactions
 
 	//admin commands
-	{"/reload", &Commands::reloadInfo},
 	{"/raid", &Commands::forceRaid},
 
 	// player commands
@@ -240,72 +239,6 @@ bool Commands::exeCommand(Player& player, const std::string& cmd)
 		}
 	}
 	return true;
-}
-
-void Commands::reloadInfo(Player& player, const std::string& param)
-{
-	std::string tmpParam = asLowerCaseString(param);
-	if (tmpParam == "action" || tmpParam == "actions") {
-		g_actions->reload();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded actions.");
-	} else if (tmpParam == "config" || tmpParam == "configuration") {
-		g_config.reload();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded config.");
-	} else if (tmpParam == "command" || tmpParam == "commands") {
-		reload();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded commands.");
-	} else if (tmpParam == "creaturescript" || tmpParam == "creaturescripts") {
-		g_creatureEvents->reload();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded creature scripts.");
-	} else if (tmpParam == "monster" || tmpParam == "monsters") {
-		g_monsters.reload();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded monsters.");
-	} else if (tmpParam == "move" || tmpParam == "movement" || tmpParam == "movements"
-	           || tmpParam == "moveevents" || tmpParam == "moveevent") {
-		g_moveEvents->reload();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded movements.");
-	} else if (tmpParam == "npc" || tmpParam == "npcs") {
-		Npcs::reload();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded npcs.");
-	} else if (tmpParam == "raid" || tmpParam == "raids") {
-		Raids::getInstance()->reload();
-		Raids::getInstance()->startup();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded raids.");
-	} else if (tmpParam == "spell" || tmpParam == "spells") {
-		g_spells->reload();
-		g_monsters.reload();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded spells.");
-	} else if (tmpParam == "talk" || tmpParam == "talkaction" || tmpParam == "talkactions") {
-		g_talkActions->reload();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded talk actions.");
-	} else if (tmpParam == "items") {
-		Item::items.reload();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded items.");
-	} else if (tmpParam == "weapon" || tmpParam == "weapons") {
-		g_weapons->reload();
-		g_weapons->loadDefaults();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded weapons.");
-	} else if (tmpParam == "quest" || tmpParam == "quests") {
-		Quests::getInstance()->reload();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded quests.");
-	} else if (tmpParam == "mount" || tmpParam == "mounts") {
-		Mounts::getInstance()->reload();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded mounts.");
-	} else if (tmpParam == "globalevents" || tmpParam == "globalevent") {
-		g_globalEvents->reload();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded globalevents.");
-	} else if (tmpParam == "events") {
-		g_events->load();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded events.");
-	} else if (tmpParam == "chat" || tmpParam == "channel" || tmpParam == "chatchannels") {
-		g_chat.load();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded chatchannels.");
-	} else if (tmpParam == "global") {
-		g_luaEnvironment.loadFile("data/global.lua");
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded global.lua.");
-	} else {
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reload type not found.");
-	}
 }
 
 void Commands::sellHouse(Player& player, const std::string& param)

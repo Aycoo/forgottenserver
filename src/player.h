@@ -125,6 +125,7 @@ enum player_boolean_config_t {
 	PLAYER_REMOVE_RUNE_CHARGES = 2,
 	PLAYER_EXPERIENCE_FROM_PLAYERS = 3,
 	PLAYER_NO_SKULL = 4,
+	PLAYER_NO_SECURE_MODE = 5,
 
 	PLAYER_LAST_BOOLEAN_CONFIG /* this must be the last one */
 };
@@ -1198,13 +1199,13 @@ class Player : public Creature, public Cylinder
 			rates[skill] = value;
 		}
 
-		const std::string& getConfigString(player_string_config_t _what) {
+		const std::string& getConfigString(player_string_config_t _what) const {
 			return m_confString[_what];
 		}
-		double getConfigNumber(player_number_config_t _what){
+		double getConfigNumber(player_number_config_t _what) const{
 			return m_confNumber[_what];
 		}
-		bool getConfigBoolean(player_boolean_config_t _what){
+		bool getConfigBoolean(player_boolean_config_t _what) const{
 			return m_confBoolean[_what];
 		}
 

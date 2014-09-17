@@ -64,6 +64,10 @@ bool ScriptingManager::loadScriptSystems()
 		std::cout << "[Warning - ScriptingManager::loadScriptSystems] Can not load data/global.lua" << std::endl;
 	}
 
+	if (g_luaEnvironment.loadFile("data/systeminit.lua") == -1) {
+		std::cout << "[Warning - ScriptingManager::loadScriptSystems] Can not load data/systeminit.lua" << std::endl;
+	}
+
 	g_weapons = new Weapons();
 	if (!g_weapons->loadFromXml()) {
 		std::cout << "> ERROR: Unable to load weapons!" << std::endl;

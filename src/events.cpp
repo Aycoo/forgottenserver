@@ -688,16 +688,16 @@ bool Events::eventCreatureOnTarget(Creature* creature, Creature* target, bool is
 	return scriptInterface.callFunction(3);
 }
 
-bool Events::eventCreatureOnChangeOutfit(Creature* creature, Outfit_t& newOutfit, const Outfit_t oldOutfit)
+void Events::eventCreatureOnChangeOutfit(Creature* creature, Outfit_t &newOutfit, const Outfit_t oldOutfit)
 {
 	// Creature:onChangeOutfit(newOutfit, oldOutfit)
 	if (creatureOnChangeOutfit == -1) {
-		return true;
+		return;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
 		std::cout << "[Error - Events::eventCreatureOnChangeOutfit] Call stack overflow" << std::endl;
-		return false;
+		return;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
@@ -712,16 +712,35 @@ bool Events::eventCreatureOnChangeOutfit(Creature* creature, Outfit_t& newOutfit
 	LuaScriptInterface::pushOutfit(L, newOutfit);
 	LuaScriptInterface::pushOutfit(L, oldOutfit);
 
-	bool success = scriptInterface.callFunction(3, 2, false);
-	if (success)
-	{
-		newOutfit = scriptInterface.getOutfit(L, -1);
+	if (scriptInterface.protectedCall(L, 3, 1) != 0) {
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
+	}
+	else {
+		if (lua_istable(L, -1)){
+			//Reading the outfit table data
+			newOutfit.lookMount = LuaScriptInterface::getField<uint16_t>(L, -1, "lookMount");
+			lua_pop(L, 1);
+			newOutfit.lookAddons = LuaScriptInterface::getField<uint8_t>(L, -1, "lookAddons");
+			lua_pop(L, 1);
+			newOutfit.lookFeet = LuaScriptInterface::getField<uint8_t>(L, -1, "lookFeet");
+			lua_pop(L, 1);
+			newOutfit.lookLegs = LuaScriptInterface::getField<uint8_t>(L, -1, "lookLegs");
+			lua_pop(L, 1);
+			newOutfit.lookBody = LuaScriptInterface::getField<uint8_t>(L, -1, "lookBody");
+			lua_pop(L, 1);
+			newOutfit.lookHead = LuaScriptInterface::getField<uint8_t>(L, -1, "lookHead");
+			lua_pop(L, 1);
+			newOutfit.lookTypeEx = LuaScriptInterface::getField<uint16_t>(L, -1, "lookTypeEx");
+			lua_pop(L, 1);
+			newOutfit.lookType = LuaScriptInterface::getField<uint16_t>(L, -1, "lookType");
+			lua_pop(L, 1);
+	
+			//remove the table
+			lua_pop(L, 1);
+		}
 	}
 
-	lua_settop(L, 0);
-	LuaScriptInterface::resetScriptEnv();
-
-	return success;
+	scriptInterface.resetScriptEnv();
 }
 
 bool Events::eventCreatureOnAttack(Creature* creature, Creature* target)

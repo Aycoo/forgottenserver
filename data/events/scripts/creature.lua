@@ -74,7 +74,7 @@ function Creature:onChangeOutfit(newOutfit, oldOutfit)
 	end
 	-- return true so the player is able to change his outfit or return false and the old outfit will stay.
 	-- start scripting from here on.
-	return true, newOutfit
+	return newOutfit
 end
 
 function Creature:onAttack(target)

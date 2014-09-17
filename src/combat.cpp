@@ -265,7 +265,7 @@ ReturnValue Combat::canTargetCreature(const Player* player, const Creature* targ
 			return RET_YOUMAYNOTATTACKTHISPLAYER;
 		}
 
-		if (player->getSecureMode() == SECUREMODE_ON && !Combat::isInPvpZone(player, target) &&
+		if ((!player->getConfigBoolean(PLAYER_NO_SECURE_MODE) && player->getSecureMode() == SECUREMODE_ON) && !Combat::isInPvpZone(player, target) &&
 		        player->getSkullClient(target->getPlayer()) == SKULL_NONE) {
 			return RET_TURNSECUREMODETOATTACKUNMARKEDPLAYERS;
 		}
@@ -279,7 +279,7 @@ ReturnValue Combat::canDoCombat(const Creature* caster, const Tile* tile, bool i
 	bool success = true;
 
 	//scripting event - onCombatArea
-	const CreatureEventList& combatEvents = const_cast<Creature*>(caster)->getCreatureEvents(CREATURE_EVENT_ONCOMBATAREA);
+	const CreatureEventList& combatEvents = const_cast<Creature*>(caster)->getCreatureEvents(CREATURE_EVENT_COMBATAREA);
 	for (CreatureEvent* combatEvent : combatEvents) {
 		if (!combatEvent->executeCombatArea(const_cast<Creature*>(caster), const_cast<Tile*>(tile), isAggressive) && success)
 		{
@@ -287,11 +287,10 @@ ReturnValue Combat::canDoCombat(const Creature* caster, const Tile* tile, bool i
 		}
 	}
 
-	if (!success)
+	if (!success){
 		return RET_NOTPOSSIBLE;
-
-
-
+	}
+		
 	if (tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
 		return RET_NOTENOUGHROOM;
 	}
@@ -364,10 +363,11 @@ bool Combat::isProtected(const Player* attacker, const Player* target)
 ReturnValue Combat::canDoCombat(const Creature* attacker, const Creature* target, bool isAggressive)
 {
 	if (attacker) {
+		
 		bool success = true;
 
 		//scripting event - onCombat
-		const CreatureEventList& combatEvents = const_cast<Creature*>(attacker)->getCreatureEvents(CREATURE_EVENT_ONCOMBAT);
+		const CreatureEventList& combatEvents = const_cast<Creature*>(attacker)->getCreatureEvents(CREATURE_EVENT_COMBAT);
 		for (CreatureEvent* combatEvent : combatEvents) {
 			if (!combatEvent->executeCombat(const_cast<Creature*>(attacker), const_cast<Creature*>(target), isAggressive) && success)
 			{
@@ -375,8 +375,10 @@ ReturnValue Combat::canDoCombat(const Creature* attacker, const Creature* target
 			}
 		}
 
-		if (!success)
+		if (!success){
 			return RET_NOTPOSSIBLE;
+		}
+		
 
 		if (const Player* targetPlayer = target->getPlayer()) {
 			if (targetPlayer->hasFlag(PlayerFlag_CannotBeAttacked)) {

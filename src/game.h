@@ -447,7 +447,7 @@ class Game
 		bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor) const;
 
 		void changeSpeed(Creature* creature, int32_t varSpeedDelta);
-		void internalCreatureChangeOutfit(Creature* creature, const Outfit_t& oufit);
+		void internalCreatureChangeOutfit(Creature* creature, Outfit_t& oufit);
 		void internalCreatureChangeVisible(Creature* creature, bool visible);
 		void changeLight(const Creature* creature);
 		void updatePlayerSkull(Player* player);
@@ -535,6 +535,7 @@ class Game
 		void setBedSleeper(BedItem* bed, uint32_t guid);
 		void removeBedSleeper(uint32_t guid);
 
+		bool reloadInfo(ReloadType type);
 	protected:
 		bool playerSayCommand(Player* player, const std::string& text);
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
@@ -608,6 +609,7 @@ class Game
 		uint32_t lastStageLevel;
 		bool stagesEnabled;
 		bool useLastStageLevel;
+
 };
 
 #endif
