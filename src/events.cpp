@@ -23,6 +23,7 @@
 #include "tools.h"
 #include "item.h"
 #include "player.h"
+#include "const.h"
 
 #include <set>
 

@@ -12,7 +12,7 @@
 	<talkaction words="/storage" separator=" " groupId="3" script="storage.lua" />
 	
 	<!-- commands for GM -->
-	<talkaction words="/reload" separator=" " groupId="2" script="reload.lua" />
+	<talkaction words="/reload" separator=" " group="2" acctype="5" log="yes" script="reload.lua" />
 	<talkaction words="/ban" separator=" " groupId="2" script="ban.lua" />
 	<talkaction words="/ipban" separator=" " groupId="2" script="ipban.lua" />
 	<talkaction words="/up" groupId="2" script="up.lua" />

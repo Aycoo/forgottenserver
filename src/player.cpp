@@ -3674,6 +3674,11 @@ void Player::onAttackedCreature(Creature* target)
 				pzLocked = true;
 				sendIcons();
 			}
+			
+			if (getConfigBoolean(PLAYER_NO_SKULL)){
+				addInFightTicks();
+				return;
+			}
 
 			if (!Combat::isInPvpZone(this, targetPlayer) && !isInWar(targetPlayer)) {
 				addAttacked(targetPlayer);

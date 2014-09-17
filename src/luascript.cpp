@@ -54,9 +54,6 @@ extern ConfigManager g_config;
 extern Vocations g_vocations;
 extern Spells* g_spells;
 
-
-
-
 enum {
 	EVENT_ID_LOADING = 1,
 	EVENT_ID_USER = 1000,
@@ -2135,6 +2132,9 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Creature", "getPathTo", LuaScriptInterface::luaCreatureGetPathTo);
 
+	registerMethod("Creature", "isAbleToWalk", LuaScriptInterface::luaCreatureIsAbleToWalk);
+	registerMethod("Creature", "canWalk", LuaScriptInterface::luaCreatureCanWalk);
+
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
 	registerMetaMethod("Player", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -2285,7 +2285,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getRate", LuaScriptInterface::luaPlayerGetRate);
 
 	registerMethod("Player", "getConfigString", LuaScriptInterface::luaPlayerGetConfigString);
-	registerMethod("Player", "getConfigNUmber", LuaScriptInterface::luaPlayerGetConfigNumber);
+	registerMethod("Player", "getConfigNumber", LuaScriptInterface::luaPlayerGetConfigNumber);
 	registerMethod("Player", "getConfigBoolean", LuaScriptInterface::luaPlayerGetConfigBoolean);
 	registerMethod("Player", "setConfigString", LuaScriptInterface::luaPlayerSetConfigString);
 	registerMethod("Player", "setConfigNumber", LuaScriptInterface::luaPlayerSetConfigNumber);
@@ -8078,6 +8078,36 @@ int32_t LuaScriptInterface::luaCreatureGetPathTo(lua_State* L)
 	return 1;
 }
 
+int32_t LuaScriptInterface::luaCreatureIsAbleToWalk(lua_State* L)
+{
+	// creature:isAbleToWalk()
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		pushBoolean(L, creature->isAbleToMove());
+	}
+	else {
+		lua_pushnil(L);
+	}
+
+	return 1;
+}
+
+int32_t LuaScriptInterface::luaCreatureCanWalk(lua_State* L)
+{
+	// creature:canWalk(bool)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	bool n = getBoolean(L, 2);
+	if (creature) {
+		creature->canMove(n);
+		pushBoolean(L, true);
+	}
+	else {
+		lua_pushnil(L);
+	}
+
+	return 1;
+}
+
 // Player
 int32_t LuaScriptInterface::luaPlayerCreate(lua_State* L)
 {
@@ -9851,7 +9881,7 @@ int32_t LuaScriptInterface::luaPlayerGetRate(lua_State* L)
 		lua_pushnumber(L, player->getRate((skills_t)skillType));
 	}
 	else {
-		pushBoolean(L, false);
+		lua_pushnil(L);
 	}
 
 	return 1;
@@ -9868,7 +9898,7 @@ int32_t LuaScriptInterface::luaPlayerSetRate(lua_State* L)
 		pushBoolean(L, true);
 	}
 	else {
-		pushBoolean(L, false);
+		lua_pushnil(L);
 	}
 
 	return 1;
@@ -9882,7 +9912,7 @@ int32_t LuaScriptInterface::luaPlayerGetConfigString(lua_State* L)
 		pushString(L, player->getConfigString((player_string_config_t)(getNumber<int32_t>(L, 2))));
 	}
 	else {
-		pushBoolean(L, false);
+		lua_pushnil(L);
 	}
 
 	return 1;
@@ -9896,7 +9926,7 @@ int32_t LuaScriptInterface::luaPlayerGetConfigNumber(lua_State* L)
 		lua_pushnumber(L, player->getConfigNumber((player_number_config_t)(getNumber<int32_t>(L, 2))));
 	}
 	else {
-		pushBoolean(L, false);
+		lua_pushnil(L);
 	}
 
 	return 1;
@@ -9910,7 +9940,7 @@ int32_t LuaScriptInterface::luaPlayerGetConfigBoolean(lua_State* L)
 		pushBoolean(L, player->getConfigBoolean((player_boolean_config_t)(getNumber<int32_t>(L, 2))));
 	}
 	else {
-		pushBoolean(L, false);
+		lua_pushnil(L);
 	}
 
 	return 1;
@@ -9923,11 +9953,10 @@ int32_t LuaScriptInterface::luaPlayerSetConfigString(lua_State* L)
 	if (player) {
 
 		player->setConfigString((player_string_config_t)(getNumber<int32_t>(L, 2)), getString(L, 3));
-
 		pushBoolean(L, true);
 	}
 	else {
-		pushBoolean(L, false);
+		lua_pushnil(L);
 	}
 
 	return 1;
@@ -9940,11 +9969,10 @@ int32_t LuaScriptInterface::luaPlayerSetConfigNumber(lua_State* L)
 	if (player) {
 
 		player->setConfigNumber((player_number_config_t)(getNumber<int32_t>(L, 2)), getNumber<double>(L, 3));
-
 		pushBoolean(L, true);
 	}
 	else {
-		pushBoolean(L, false);
+		lua_pushnil(L);
 	}
 
 	return 1;
@@ -9957,11 +9985,10 @@ int32_t LuaScriptInterface::luaPlayerSetConfigBoolean(lua_State* L)
 	if (player) {
 		
 		player->setConfigBoolean((player_boolean_config_t)(getNumber<int32_t>(L, 2)), getBoolean(L, 3));
-
 		pushBoolean(L, true);
 	}
 	else {
-		pushBoolean(L, false);
+		lua_pushnil(L);
 	}
 
 	return 1;

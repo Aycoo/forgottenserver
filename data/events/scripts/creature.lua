@@ -50,6 +50,11 @@ end
 
 -- Events start from here on!
 function Creature:onTarget(target, isAttacked)
+	if self:isMonster() then
+		if ddos.enabled then
+			return false
+		end
+	end
 	if not register(self, Register.target) then
 		return true
 	end
@@ -96,5 +101,5 @@ function Creature:onHear(sayCreature, words, type, pos)
 end
 
 function Creature:onMove(fromPosition, toPosition)
-	return true
+	return self:isAbleToWalk()
 end

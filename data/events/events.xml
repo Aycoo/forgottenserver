@@ -20,7 +20,7 @@
 	<event class="Player" method="getMissionDescription" enabled="1"/>
 	<event class="Player" method="onSave" enabled="1"/>
 	<!-- Creature methods -->
-	<event class="Creature" method="onTarget" enabled ="0"/>
+	<event class="Creature" method="onTarget" enabled ="1"/>
 	<event class="Creature" method="onChangeOutfit" enabled="0"/>
 	<event class="Creature" method="onAttack" enabled="0"/>
 	<event class="Creature" method="onHear" enabled="0"/>

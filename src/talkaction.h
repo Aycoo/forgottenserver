@@ -76,6 +76,10 @@ class TalkAction : public Event
 			return access;
 		}
 
+		bool getLogged() const{
+			return logged;
+		}
+
 		//scripting
 		bool executeSay(const Player* player, const std::string& words, const std::string& param, SpeakClasses type) const;
 		//
@@ -87,6 +91,7 @@ class TalkAction : public Event
 		char separator;
 		AccountType_t accountType;
 		uint32_t access;
+		bool logged;
 };
 
 #endif
